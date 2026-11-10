@@ -237,7 +237,9 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
 
         super().do_GET()
 
-def run_telemetry_server(port=8080):
+def run_telemetry_server(port=8085):
+    if len(sys.argv) > 1 and sys.argv[1].isdigit():
+        port = int(sys.argv[1])
     server = socketserver.ThreadingTCPServer(("0.0.0.0", port), TelemetryHandler)
     server.allow_reuse_address = True
     print(f"[Telemetry] Server running on http://0.0.0.0:{port}")
