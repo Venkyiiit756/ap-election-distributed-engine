@@ -18,6 +18,42 @@ COORDINATOR_LOCK = threading.Lock()
 CONTROL_QUEUE = {}
 REMOTE_AGENTS = {}
 CMD_SEQ = [0]
+BACKFILL_MODE = True
+BACKFILL_CLAIMED = {}
+BACKFILL_ATTEMPTED = set()
+
+PRIORITY_BACKFILL_CASE = """
+CASE
+    WHEN m.district_id = '752' THEN 0
+    WHEN m.district_id IN ('750','755','502','747','503','504','505','510','511','517','520','523','746','751','790','791') THEN 1
+    WHEN m.district_id IN ('744','521','754') THEN 2
+    WHEN m.district_id IN ('748','753','743','745') THEN 3
+    ELSE 4
+END
+"""
+
+def _claim_backfill_mandal(cur, node_id, now):
+    rows = cur.execute(f"""
+    SELECT DISTINCT m.mandal_id, m.district_id, m.district_name, m.rev_div_id, m.mandal_name, m.primary_ac_no
+    FROM mandals m
+    JOIN gram_panchayats gp ON gp.mandal_id = m.mandal_id
+    LEFT JOIN ward_strengths w ON w.gp_id = gp.gp_id
+    WHERE w.gp_id IS NULL
+    ORDER BY {PRIORITY_BACKFILL_CASE}, m.district_id ASC, m.mandal_name ASC
+    """).fetchall()
+    for r in rows:
+        m_id = str(r[0])
+        if m_id in BACKFILL_ATTEMPTED:
+            continue
+        prev = BACKFILL_CLAIMED.get(m_id)
+        if prev and prev[1] > now - 900:
+            continue
+        BACKFILL_CLAIMED[m_id] = (node_id, now)
+        return {
+            "mandal_id": r[0], "district_id": r[1], "district_name": r[2],
+            "rev_div_id": r[3], "mandal_name": r[4], "primary_ac_no": r[5]
+        }
+    return None
 
 HTML_PAGE = """<!DOCTYPE html>
 <html lang="en">
@@ -342,6 +378,31 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json(200, {"agents": data})
             return
 
+        elif parsed.path == "/api/backfill/status":
+            conn = sqlite3.connect(DB_PATH, timeout=30)
+            cur = conn.cursor()
+            total_gps = cur.execute("SELECT COUNT(*) FROM gram_panchayats").fetchone()[0]
+            gps_with_wards = cur.execute("SELECT COUNT(DISTINCT gp_id) FROM ward_strengths").fetchone()[0]
+            ward_rows = cur.execute("SELECT COUNT(*) FROM ward_strengths").fetchone()[0]
+            mandals_missing = cur.execute(
+                "SELECT COUNT(DISTINCT gp.mandal_id) FROM gram_panchayats gp "
+                "LEFT JOIN ward_strengths w ON w.gp_id = gp.gp_id WHERE w.gp_id IS NULL"
+            ).fetchone()[0]
+            conn.close()
+            with COORDINATOR_LOCK:
+                claimed_cnt = len(BACKFILL_CLAIMED)
+                attempted_cnt = len(BACKFILL_ATTEMPTED)
+            self._send_json(200, {
+                "backfill_mode": BACKFILL_MODE,
+                "mandals_still_missing_wards": mandals_missing,
+                "in_flight": claimed_cnt,
+                "attempted_this_pass": attempted_cnt,
+                "gps_with_wards": gps_with_wards,
+                "total_gps": total_gps,
+                "ward_rows": ward_rows
+            })
+            return
+
         super().do_GET()
 
     def _send_json(self, code, payload):
@@ -387,40 +448,48 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
             self._send_json(200, {"ok": True})
             return
 
-        elif parsed.path == "/api/claim_mandal":
+        elif parsed.path in ("/api/claim_mandal", "/api/claim_ward_backfill"):
             node_id = body.get("node_id", "remote-node")
             with COORDINATOR_LOCK:
                 conn = sqlite3.connect(DB_PATH, timeout=30)
                 cur = conn.cursor()
-                cur.execute("""
-                SELECT mandal_id, district_id, district_name, rev_div_id, mandal_name, primary_ac_no
-                FROM mandals
-                WHERE status = 'PENDING' OR (status = 'IN_PROGRESS' AND updated_at < ?)
-                ORDER BY
-                    CASE
-                        WHEN primary_ac_no IN (35, 36, 37, 52, 40) THEN 0
-                        WHEN primary_ac_no > 0 THEN 1
-                        ELSE 2
-                    END,
-                    district_id ASC,
-                    mandal_name ASC
-                LIMIT 1
-                """, (now - 300,))
-                row = cur.fetchone()
-                if not row:
+                if parsed.path == "/api/claim_mandal":
+                    cur.execute("""
+                    SELECT mandal_id, district_id, district_name, rev_div_id, mandal_name, primary_ac_no
+                    FROM mandals
+                    WHERE status = 'PENDING' OR (status = 'IN_PROGRESS' AND updated_at < ?)
+                    ORDER BY
+                        CASE
+                            WHEN primary_ac_no IN (35, 36, 37, 52, 40) THEN 0
+                            WHEN primary_ac_no > 0 THEN 1
+                            ELSE 2
+                        END,
+                        district_id ASC,
+                        mandal_name ASC
+                    LIMIT 1
+                    """, (now - 300,))
+                    row = cur.fetchone()
+                    if row:
+                        m_id, d_id, d_name, rd_id, m_name, pri_ac = row
+                        cur.execute("UPDATE mandals SET status = 'IN_PROGRESS', assigned_node = ?, updated_at = ? WHERE mandal_id = ?", (node_id, now, m_id))
+                        conn.commit()
+                        conn.close()
+                        self._send_json(200, {
+                            "mandal": {
+                                "mandal_id": m_id, "district_id": d_id, "district_name": d_name,
+                                "rev_div_id": rd_id, "mandal_name": m_name, "primary_ac_no": pri_ac
+                            }
+                        })
+                        return
+
+                if BACKFILL_MODE or parsed.path == "/api/claim_ward_backfill":
+                    m_obj = _claim_backfill_mandal(cur, node_id, now)
                     conn.close()
-                    self._send_json(200, {"mandal": None})
+                    self._send_json(200, {"mandal": m_obj})
                     return
-                m_id, d_id, d_name, rd_id, m_name, pri_ac = row
-                cur.execute("UPDATE mandals SET status = 'IN_PROGRESS', assigned_node = ?, updated_at = ? WHERE mandal_id = ?", (node_id, now, m_id))
-                conn.commit()
+
                 conn.close()
-            self._send_json(200, {
-                "mandal": {
-                    "mandal_id": m_id, "district_id": d_id, "district_name": d_name,
-                    "rev_div_id": rd_id, "mandal_name": m_name, "primary_ac_no": pri_ac
-                }
-            })
+            self._send_json(200, {"mandal": None})
             return
 
         elif parsed.path == "/api/submit_mandal":
@@ -461,9 +530,13 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                     ON CONFLICT(gp_id) DO UPDATE SET
                         ac_no=excluded.ac_no, district_id=excluded.district_id, rev_div_id=excluded.rev_div_id,
                         mandal_id=excluded.mandal_id, mandal_name=excluded.mandal_name, gp_name_en=excluded.gp_name_en,
-                        official_voters=excluded.official_voters, harvested_voters=excluded.harvested_voters,
-                        male_voters=excluded.male_voters, female_voters=excluded.female_voters, other_voters=excluded.other_voters,
-                        wards_count=excluded.wards_count, status='COMPLETED', updated_at=excluded.updated_at
+                        official_voters=CASE WHEN excluded.official_voters > 0 THEN excluded.official_voters ELSE gram_panchayats.official_voters END,
+                        harvested_voters=CASE WHEN excluded.harvested_voters > 0 THEN excluded.harvested_voters ELSE gram_panchayats.harvested_voters END,
+                        male_voters=CASE WHEN excluded.male_voters > 0 THEN excluded.male_voters ELSE gram_panchayats.male_voters END,
+                        female_voters=CASE WHEN excluded.female_voters > 0 THEN excluded.female_voters ELSE gram_panchayats.female_voters END,
+                        other_voters=CASE WHEN excluded.other_voters > 0 THEN excluded.other_voters ELSE gram_panchayats.other_voters END,
+                        wards_count=CASE WHEN excluded.wards_count > 0 THEN excluded.wards_count ELSE gram_panchayats.wards_count END,
+                        status='COMPLETED', updated_at=excluded.updated_at
                     """, (gp_id, ac_no, d_id, rd_id, m_id, m_name, gp["gp_name"], gp["total"], gp["total"], gp["male"], gp["female"], gp["other"], len(w_list), now))
 
                     for w in w_list:
@@ -478,16 +551,18 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                 cur.execute("""
                 UPDATE mandals
                 SET status = 'COMPLETED', primary_ac_no = CASE WHEN primary_ac_no=0 THEN ? ELSE primary_ac_no END,
-                    total_gps = ?, total_voters = ?, assigned_node = ?, updated_at = ?
+                    total_gps = CASE WHEN ? > 0 THEN ? ELSE total_gps END,
+                    total_voters = CASE WHEN ? > 0 THEN ? ELSE total_voters END,
+                    assigned_node = ?, updated_at = ?
                 WHERE mandal_id = ?
-                """, (mandal_ac, len(gps), mandal_voters, node_id, now, m_id))
+                """, (mandal_ac, len(gps), len(gps), mandal_voters, mandal_voters, node_id, now, m_id))
 
                 for ac_no in touched_acs:
                     row = cur.execute("SELECT COUNT(*), COALESCE(SUM(official_voters), 0) FROM gram_panchayats WHERE ac_no = ?", (ac_no,)).fetchone()
                     cnt, voters = row
                     pending_m = cur.execute("SELECT COUNT(*) FROM mandals WHERE primary_ac_no = ? AND status != 'COMPLETED'", (ac_no,)).fetchone()[0]
                     total_m = cur.execute("SELECT COUNT(*) FROM mandals WHERE primary_ac_no = ?", (ac_no,)).fetchone()[0]
-                    done_ac = (total_m > 0 and pending_m == 0)
+                    done_ac = (total_m > 0 and pending_m == 0) or (pending_m == 0 and cnt > 0)
                     cur.execute("""
                     UPDATE constituencies
                     SET total_gps = ?, completed_gps = ?, total_voters = ?, completed_voters = ?,
@@ -497,6 +572,8 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                     """, (cnt, cnt, voters, voters, 1 if done_ac else 0, node_id, now, ac_no))
                 conn.commit()
                 conn.close()
+                BACKFILL_CLAIMED.pop(m_id, None)
+                BACKFILL_ATTEMPTED.add(m_id)
 
             self._send_json(200, {"ok": True, "gps": len(gps), "voters": mandal_voters})
             return
