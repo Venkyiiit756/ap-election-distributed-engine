@@ -107,6 +107,23 @@ def init_db():
     )
     """)
 
+    # Mandals queue table (1 row per unique AP Mandal -> zero duplication across ACs)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS mandals (
+        mandal_id TEXT PRIMARY KEY,
+        district_id TEXT,
+        district_name TEXT,
+        rev_div_id TEXT,
+        mandal_name TEXT,
+        primary_ac_no INTEGER DEFAULT 0,
+        total_gps INTEGER DEFAULT 0,
+        total_voters INTEGER DEFAULT 0,
+        status TEXT DEFAULT 'PENDING',
+        assigned_node TEXT,
+        updated_at REAL
+    )
+    """)
+
     # Active Worker Nodes table
     cur.execute("""
     CREATE TABLE IF NOT EXISTS worker_nodes (
