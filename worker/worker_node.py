@@ -61,11 +61,14 @@ class APSECClient:
             except Exception:
                 time.sleep(1.0 * (attempt + 1))
 
-    def post(self, path, data, ajax=False):
-        for attempt in range(4):
+    def post(self, path, data, ajax=False, retries=4, timeout=15):
+        for attempt in range(retries):
             try:
                 if not self.conn or not self.csrf:
                     self._init_session()
+                self.conn.timeout = timeout
+                if self.conn.sock:
+                    self.conn.sock.settimeout(timeout)
                 payload = dict(data)
                 payload["_csrf"] = self.csrf
                 hdrs = {
@@ -137,7 +140,7 @@ class APSECClient:
             "revenueDivisionId": str(rev_div_id),
             "mandalId": str(mandal_id),
             "gpId": str(gp_id)
-        })
+        }, retries=1, timeout=6)
         wards = []
         for tr in TR_RE.findall(html):
             tds = [re.sub(r'<[^>]+>', '', td).strip() for td in TD_RE.findall(tr)]
