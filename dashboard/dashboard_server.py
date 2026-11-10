@@ -15,6 +15,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(BASE_DIR, "coordinator", "registry.sqlite")
 EXPORTS_DIR = os.path.join(BASE_DIR, "exports")
 COORDINATOR_LOCK = threading.Lock()
+CONTROL_QUEUE = {}
+REMOTE_AGENTS = {}
+CMD_SEQ = [0]
 
 HTML_PAGE = """<!DOCTYPE html>
 <html lang="en">
@@ -112,12 +115,17 @@ HTML_PAGE = """<!DOCTYPE html>
           <th>HTTP Rate</th>
           <th>Last Heartbeat</th>
           <th>Status</th>
+          <th>Remote Control</th>
         </tr>
       </thead>
       <tbody id="nodes-tbody">
-        <tr><td colspan="8" style="text-align:center; color:var(--muted);">No active nodes registered yet. Launch a worker node to join cluster.</td></tr>
+        <tr><td colspan="9" style="text-align:center; color:var(--muted);">No active nodes registered yet. Launch a worker node to join cluster.</td></tr>
       </tbody>
     </table>
+    <div id="remote-logs-panel" style="margin-top:16px; display:none;">
+      <h4 style="font-size:13px; color:#94a3b8; margin-bottom:8px;">Remote Agent Live Console</h4>
+      <pre id="remote-logs-pre" style="background:#0f172a; border:1px solid var(--border); border-radius:8px; padding:12px; font-size:12px; color:#cbd5e1; max-height:220px; overflow:auto; white-space:pre-wrap;"></pre>
+    </div>
   </div>
 
   <div class="card">
@@ -142,6 +150,14 @@ HTML_PAGE = """<!DOCTYPE html>
 </div>
 
 <script>
+function sendNodeCmd(nodeId, action, workers) {
+  fetch('/api/node/command', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ node_id: nodeId, action: action, workers: workers })
+  }).then(r => r.json()).then(() => refreshTelemetry());
+}
+
 function refreshTelemetry() {
   fetch('/api/telemetry')
     .then(r => r.json())
@@ -151,12 +167,23 @@ function refreshTelemetry() {
       document.getElementById('stat-rate').innerText = data.cluster_rate.toFixed(1) + " voters/s";
       document.getElementById('stat-req-rate').innerText = data.http_req_rate.toFixed(1) + " req/s";
 
+      const remoteMap = {};
+      (data.remote_agents || []).forEach(a => { remoteMap[a.node_id] = a; });
+
       // Nodes Table
       const nbody = document.getElementById('nodes-tbody');
       if (data.nodes.length === 0) {
-        nbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted);">No active nodes connected yet. Run worker_node.py on any laptop to begin.</td></tr>';
+        nbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:var(--muted);">No active nodes connected yet. Run worker_node.py on any laptop to begin.</td></tr>';
       } else {
-        nbody.innerHTML = data.nodes.map(n => `
+        nbody.innerHTML = data.nodes.map(n => {
+          const isRemote = Boolean(remoteMap[n.node_id]);
+          const ctrl = isRemote ? `
+            <button class="btn" style="padding:3px 8px; margin-right:4px;" onclick="sendNodeCmd('${n.node_id}','scale',2)">2T</button>
+            <button class="btn" style="padding:3px 8px; margin-right:4px;" onclick="sendNodeCmd('${n.node_id}','scale',4)">4T</button>
+            <button class="btn" style="padding:3px 8px; margin-right:4px;" onclick="sendNodeCmd('${n.node_id}','update',${n.workers_count})">Update</button>
+            <button class="btn" style="padding:3px 8px; background:#dc2626;" onclick="sendNodeCmd('${n.node_id}','stop',0)">Stop</button>
+          ` : '<span style="color:var(--muted)">Local Host</span>';
+          return `
           <tr>
             <td><strong>${n.node_id}</strong></td>
             <td>${n.hostname} (${n.ip_address})</td>
@@ -166,8 +193,22 @@ function refreshTelemetry() {
             <td>${data.http_req_rate.toFixed(1)} req/s</td>
             <td>${n.last_seen_sec}s ago</td>
             <td><span class="status-badge status-COMPLETED">${n.status}</span></td>
-          </tr>
-        `).join('');
+            <td>${ctrl}</td>
+          </tr>`;
+        }).join('');
+      }
+
+      const logPanel = document.getElementById('remote-logs-panel');
+      const logPre = document.getElementById('remote-logs-pre');
+      const agents = data.remote_agents || [];
+      if (agents.length > 0) {
+        logPanel.style.display = 'block';
+        logPre.innerText = agents.map(a =>
+          `=== ${a.node_id} (${a.worker_running ? 'RUNNING ' + a.workers_count + 'T' : 'STOPPED'} | seen ${a.last_poll_sec}s ago) ===\n` +
+          (a.log_tail || []).join('\n')
+        ).join('\n\n');
+      } else {
+        logPanel.style.display = 'none';
       }
 
       // ACs Table
@@ -259,6 +300,20 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
 
             conn.close()
 
+            with COORDINATOR_LOCK:
+                remote_agents = []
+                for nid, info in REMOTE_AGENTS.items():
+                    remote_agents.append({
+                        "node_id": nid,
+                        "hostname": info.get("hostname"),
+                        "ip_address": info.get("ip_address"),
+                        "worker_running": info.get("worker_running", False),
+                        "workers_count": info.get("workers_count", 0),
+                        "last_poll_sec": int(now - info.get("last_poll", now)),
+                        "pending_cmds": len(CONTROL_QUEUE.get(nid, [])),
+                        "log_tail": info.get("log_tail", [])
+                    })
+
             payload = {
                 "total_acs": len(acs),
                 "completed_acs": comp_cnt,
@@ -267,12 +322,24 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                 "cluster_rate": cluster_rate,
                 "http_req_rate": http_req_rate,
                 "nodes": nodes,
+                "remote_agents": remote_agents,
                 "constituencies": acs
             }
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(payload).encode("utf-8"))
+            return
+
+        elif parsed.path == "/api/node/logs":
+            qs = urllib.parse.parse_qs(parsed.query)
+            target = qs.get("node_id", [None])[0]
+            with COORDINATOR_LOCK:
+                if target:
+                    data = REMOTE_AGENTS.get(target, {})
+                else:
+                    data = REMOTE_AGENTS
+            self._send_json(200, {"agents": data})
             return
 
         super().do_GET()
@@ -432,6 +499,35 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                 conn.close()
 
             self._send_json(200, {"ok": True, "gps": len(gps), "voters": mandal_voters})
+            return
+
+        elif parsed.path == "/api/node/poll":
+            nid = str(body.get("node_id") or "remote-agent")
+            with COORDINATOR_LOCK:
+                REMOTE_AGENTS[nid] = {
+                    "hostname": body.get("hostname", "remote"),
+                    "ip_address": body.get("ip_address", self.client_address[0]),
+                    "worker_running": bool(body.get("worker_running", False)),
+                    "workers_count": int(body.get("workers_count", 0)),
+                    "last_poll": now,
+                    "log_tail": list(body.get("log_tail", []))[-50:]
+                }
+                q = CONTROL_QUEUE.get(nid, [])
+                cmd = q.pop(0) if q else None
+            self._send_json(200, {"ok": True, "command": cmd})
+            return
+
+        elif parsed.path == "/api/node/command":
+            nid = str(body.get("node_id") or "all")
+            action = str(body.get("action") or "restart").lower()
+            workers = int(body.get("workers") or 4)
+            with COORDINATOR_LOCK:
+                CMD_SEQ[0] += 1
+                cmd = {"id": CMD_SEQ[0], "action": action, "workers": workers, "created_at": now}
+                targets = list(REMOTE_AGENTS.keys()) if nid == "all" else [nid]
+                for t in targets:
+                    CONTROL_QUEUE.setdefault(t, []).append(dict(cmd))
+            self._send_json(200, {"ok": True, "queued_for": targets, "command": cmd})
             return
 
         self._send_json(404, {"error": "not found"})

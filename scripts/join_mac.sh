@@ -15,8 +15,18 @@ else
 fi
 
 NODE_ID="macbook-$(hostname -s 2>/dev/null || echo worker)"
-echo "[MacWorker] Connecting node '$NODE_ID' ($WORKERS threads) -> $COORD_URL"
-exec python3 -u "$REPO_ROOT/worker/worker_node.py" \
-  --node-id "$NODE_ID" \
-  --workers "$WORKERS" \
-  --coordinator-url "$COORD_URL"
+echo "[MacAgent] Connecting remote-controlled agent '$NODE_ID' ($WORKERS threads) -> $COORD_URL"
+
+if [ "${AUTOSTART:-1}" = "1" ] && [ "$(uname -s)" = "Darwin" ]; then
+  python3 -u "$REPO_ROOT/scripts/mac_agent.py" \
+    --node-id "$NODE_ID" \
+    --workers "$WORKERS" \
+    --coordinator-url "$COORD_URL" \
+    --install-autostart
+  echo "[MacAgent] Background LaunchAgent installed! Windows coordinator now has full remote control."
+else
+  exec python3 -u "$REPO_ROOT/scripts/mac_agent.py" \
+    --node-id "$NODE_ID" \
+    --workers "$WORKERS" \
+    --coordinator-url "$COORD_URL"
+fi
