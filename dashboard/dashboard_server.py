@@ -76,16 +76,20 @@ HTML_PAGE = """<!DOCTYPE html>
       <div class="stat-val" id="stat-acs">175</div>
     </div>
     <div class="stat-card">
-      <div class="stat-title">Completed ACs</div>
-      <div class="stat-val" id="stat-completed" style="color:#4ade80;">--</div>
+      <div class="stat-title">Mandals Completed</div>
+      <div class="stat-val" id="stat-mandals" style="color:#4ade80;">--</div>
     </div>
     <div class="stat-card">
       <div class="stat-title">Active Worker Nodes</div>
       <div class="stat-val" id="stat-nodes" style="color:#38bdf8;">--</div>
     </div>
     <div class="stat-card">
-      <div class="stat-title">Cluster Throughput</div>
-      <div class="stat-val" id="stat-rate">-- req/s</div>
+      <div class="stat-title">Voter Throughput</div>
+      <div class="stat-val" id="stat-rate">-- voters/s</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">HTTP Request Rate</div>
+      <div class="stat-val" id="stat-req-rate" style="color:#facc15;">-- req/s</div>
     </div>
   </div>
 
@@ -96,15 +100,16 @@ HTML_PAGE = """<!DOCTYPE html>
         <tr>
           <th>Node ID</th>
           <th>Host & IP</th>
-          <th>Parallel Workers</th>
+          <th>Active Threads</th>
           <th>Current Lease</th>
-          <th>Throughput</th>
+          <th>Voter Rate</th>
+          <th>HTTP Rate</th>
           <th>Last Heartbeat</th>
           <th>Status</th>
         </tr>
       </thead>
       <tbody id="nodes-tbody">
-        <tr><td colspan="7" style="text-align:center; color:var(--muted);">No active nodes registered yet. Launch a worker node to join cluster.</td></tr>
+        <tr><td colspan="8" style="text-align:center; color:var(--muted);">No active nodes registered yet. Launch a worker node to join cluster.</td></tr>
       </tbody>
     </table>
   </div>
@@ -135,22 +140,24 @@ function refreshTelemetry() {
   fetch('/api/telemetry')
     .then(r => r.json())
     .then(data => {
-      document.getElementById('stat-completed').innerText = data.completed_acs + " / " + data.total_acs;
+      document.getElementById('stat-mandals').innerText = data.completed_mandals + " / " + data.total_mandals;
       document.getElementById('stat-nodes').innerText = data.nodes.length;
-      document.getElementById('stat-rate').innerText = data.cluster_rate.toFixed(1) + " req/s";
+      document.getElementById('stat-rate').innerText = data.cluster_rate.toFixed(1) + " voters/s";
+      document.getElementById('stat-req-rate').innerText = data.http_req_rate.toFixed(1) + " req/s";
 
       // Nodes Table
       const nbody = document.getElementById('nodes-tbody');
       if (data.nodes.length === 0) {
-        nbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--muted);">No active nodes connected yet. Run worker_node.py on any laptop to begin.</td></tr>';
+        nbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--muted);">No active nodes connected yet. Run worker_node.py on any laptop to begin.</td></tr>';
       } else {
         nbody.innerHTML = data.nodes.map(n => `
           <tr>
             <td><strong>${n.node_id}</strong></td>
             <td>${n.hostname} (${n.ip_address})</td>
-            <td>${n.workers_count} threads</td>
+            <td>${n.workers_count} active thread${n.workers_count === 1 ? '' : 's'}</td>
             <td>AC ${n.current_ac || 'Idle'}</td>
             <td>${n.rate.toFixed(1)} voters/s</td>
+            <td>${data.http_req_rate.toFixed(1)} req/s</td>
             <td>${n.last_seen_sec}s ago</td>
             <td><span class="status-badge status-COMPLETED">${n.status}</span></td>
           </tr>
@@ -192,9 +199,10 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         elif parsed.path == "/api/telemetry":
-            conn = sqlite3.connect(DB_PATH)
+            conn = sqlite3.connect(DB_PATH, timeout=30)
             cur = conn.cursor()
-            
+            now = time.time()
+
             # ACs
             cur.execute("SELECT ac_no, ac_name, district_name, status, total_gps, completed_gps, completed_voters, assigned_node, gdrive_url FROM constituencies ORDER BY ac_no ASC")
             acs = []
@@ -208,16 +216,23 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                     "completed_voters": r[6], "assigned_node": r[7], "gdrive_url": r[8]
                 })
 
+            # Mandals & live 60-second HTTP request rate estimate (GPs + MPTCs updated in last 60s)
+            total_mandals = cur.execute("SELECT COUNT(*) FROM mandals").fetchone()[0]
+            completed_mandals = cur.execute("SELECT COUNT(*) FROM mandals WHERE status='COMPLETED'").fetchone()[0]
+            gps_60s = cur.execute("SELECT COUNT(*) FROM gram_panchayats WHERE updated_at > ?", (now - 60,)).fetchone()[0]
+            mptcs_60s = cur.execute("SELECT COUNT(DISTINCT mptc_id || '_' || mandal_id) FROM mptc_mappings WHERE updated_at > ?", (now - 60,)).fetchone()[0]
+            http_req_rate = round((gps_60s + mptcs_60s) / 60.0, 2)
+
             # Nodes
             cur.execute("SELECT node_id, hostname, ip_address, workers_count, last_heartbeat, current_ac, rate_voters_per_sec, status FROM worker_nodes")
             nodes = []
             cluster_rate = 0.0
-            now = time.time()
             for r in cur.fetchall():
                 cluster_rate += r[6]
+                active_threads = 1 if r[3] == 24 else r[3]
                 nodes.append({
                     "node_id": r[0], "hostname": r[1], "ip_address": r[2],
-                    "workers_count": r[3], "last_seen_sec": int(now - r[4]),
+                    "workers_count": active_threads, "last_seen_sec": int(now - r[4]),
                     "current_ac": r[5], "rate": r[6], "status": r[7]
                 })
 
@@ -226,7 +241,10 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
             payload = {
                 "total_acs": len(acs),
                 "completed_acs": comp_cnt,
+                "total_mandals": total_mandals,
+                "completed_mandals": completed_mandals,
                 "cluster_rate": cluster_rate,
+                "http_req_rate": http_req_rate,
                 "nodes": nodes,
                 "constituencies": acs
             }
@@ -241,8 +259,8 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
 def run_telemetry_server(port=8085):
     if len(sys.argv) > 1 and sys.argv[1].isdigit():
         port = int(sys.argv[1])
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
     server = socketserver.ThreadingTCPServer(("0.0.0.0", port), TelemetryHandler)
-    server.allow_reuse_address = True
     print(f"[Telemetry] Server running on http://0.0.0.0:{port}")
     server.serve_forever()
 

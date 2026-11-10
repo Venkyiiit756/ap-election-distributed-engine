@@ -198,6 +198,7 @@ class WorkerNode:
             INSERT INTO worker_nodes (node_id, hostname, ip_address, workers_count, last_heartbeat, current_ac, rate_voters_per_sec, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, 'ACTIVE')
             ON CONFLICT(node_id) DO UPDATE SET
+                workers_count=excluded.workers_count,
                 last_heartbeat=excluded.last_heartbeat,
                 current_ac=excluded.current_ac,
                 rate_voters_per_sec=excluded.rate_voters_per_sec,
@@ -418,7 +419,7 @@ class WorkerNode:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Distributed APSEC Zero-Duplication GP & MPTC Worker")
     parser.add_argument("--node-id", type=str, default=f"node-{socket.gethostname().lower()}")
-    parser.add_argument("--workers", type=int, default=24)
+    parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
 
     node = WorkerNode(args.node_id, args.workers)
