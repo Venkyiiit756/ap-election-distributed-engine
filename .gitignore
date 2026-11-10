@@ -13,6 +13,7 @@ checkpoints/
 # Raw output downloads (synced to GDrive)
 data/
 output/
+exports/
 downloads/
 *.zip
 *.csv

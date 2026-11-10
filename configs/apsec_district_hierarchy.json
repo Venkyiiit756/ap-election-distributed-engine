@@ -1,0 +1,1813 @@
+{
+  "districts": [
+    [
+      "745",
+      "Alluri Sitharama Raju"
+    ],
+    [
+      "744",
+      "Anakapalli"
+    ],
+    [
+      "502",
+      "Ananthapuramu"
+    ],
+    [
+      "753",
+      "Annamayya"
+    ],
+    [
+      "750",
+      "Bapatla"
+    ],
+    [
+      "503",
+      "Chittoor"
+    ],
+    [
+      "747",
+      "Dr B R Ambedkar Konaseema"
+    ],
+    [
+      "505",
+      "East Godavari"
+    ],
+    [
+      "748",
+      "Eluru"
+    ],
+    [
+      "506",
+      "Guntur"
+    ],
+    [
+      "746",
+      "Kakinada"
+    ],
+    [
+      "510",
+      "Krishna"
+    ],
+    [
+      "511",
+      "Kurnool"
+    ],
+    [
+      "790",
+      "Markapuram"
+    ],
+    [
+      "755",
+      "Nandyal"
+    ],
+    [
+      "749",
+      "NTR"
+    ],
+    [
+      "751",
+      "Palnadu"
+    ],
+    [
+      "743",
+      "Parvathipuram Manyam"
+    ],
+    [
+      "791",
+      "Polavaram"
+    ],
+    [
+      "517",
+      "Prakasam"
+    ],
+    [
+      "519",
+      "Srikakulam"
+    ],
+    [
+      "515",
+      "Sri Potti Sreeramulu Nellore"
+    ],
+    [
+      "754",
+      "Sri Sathya Sai"
+    ],
+    [
+      "752",
+      "Tirupati"
+    ],
+    [
+      "520",
+      "Visakhapatnam"
+    ],
+    [
+      "521",
+      "Vizianagaram"
+    ],
+    [
+      "523",
+      "West Godavari"
+    ],
+    [
+      "504",
+      "Y S R Kadapa"
+    ]
+  ],
+  "revdivs": {
+    "745": [
+      [
+        "745001",
+        "Paderu"
+      ]
+    ],
+    "744": [
+      [
+        "744001",
+        "Adduroad Junction"
+      ],
+      [
+        "744002",
+        "Anakapalli"
+      ],
+      [
+        "744003",
+        "Narasipatnam"
+      ]
+    ],
+    "502": [
+      [
+        "502001",
+        "Anantapur"
+      ],
+      [
+        "502002",
+        "Guntakal"
+      ],
+      [
+        "502003",
+        "Kalyanadurgam"
+      ]
+    ],
+    "753": [
+      [
+        "753001",
+        "Madanapalle"
+      ],
+      [
+        "753002",
+        "Pileru"
+      ],
+      [
+        "753003",
+        "Rayachoti"
+      ]
+    ],
+    "750": [
+      [
+        "750001",
+        "Bapatla"
+      ],
+      [
+        "750002",
+        "Chirala"
+      ],
+      [
+        "750003",
+        "Repalle"
+      ]
+    ],
+    "503": [
+      [
+        "503001",
+        "Chittoor"
+      ],
+      [
+        "503002",
+        "Kuppam"
+      ],
+      [
+        "503003",
+        "Nagari"
+      ],
+      [
+        "503004",
+        "Palamaner"
+      ]
+    ],
+    "747": [
+      [
+        "747001",
+        "Amalapuram"
+      ],
+      [
+        "747002",
+        "Kothapeta"
+      ],
+      [
+        "747003",
+        "Ramachandrapuram"
+      ]
+    ],
+    "505": [
+      [
+        "505001",
+        "Kovvur"
+      ],
+      [
+        "505002",
+        "Rajamahendravaram"
+      ]
+    ],
+    "748": [
+      [
+        "748001",
+        "Eluru"
+      ],
+      [
+        "748002",
+        "Jangareddigudem"
+      ],
+      [
+        "748003",
+        "Nuzvid"
+      ]
+    ],
+    "506": [
+      [
+        "506001",
+        "Guntur"
+      ],
+      [
+        "506002",
+        "Tenali"
+      ]
+    ],
+    "746": [
+      [
+        "746001",
+        "Kakinada"
+      ],
+      [
+        "746002",
+        "Peddapuram"
+      ]
+    ],
+    "510": [
+      [
+        "510001",
+        "Gudivada"
+      ],
+      [
+        "510002",
+        "Machilipatnam"
+      ],
+      [
+        "510003",
+        "Vuyyuru"
+      ]
+    ],
+    "511": [
+      [
+        "511001",
+        "Adoni"
+      ],
+      [
+        "511002",
+        "Kurnool"
+      ],
+      [
+        "511003",
+        "Pattikonda"
+      ]
+    ],
+    "790": [
+      [
+        "790001",
+        "Kanigiri"
+      ],
+      [
+        "790002",
+        "Markapur"
+      ]
+    ],
+    "755": [
+      [
+        "755001",
+        "Atmakur"
+      ],
+      [
+        "755002",
+        "Banaganapalle"
+      ],
+      [
+        "755003",
+        "Dhone"
+      ],
+      [
+        "755004",
+        "Nandyal"
+      ]
+    ],
+    "749": [
+      [
+        "749001",
+        "Nandigama"
+      ],
+      [
+        "749002",
+        "Tiruvuru"
+      ],
+      [
+        "749003",
+        "Vijayawada"
+      ]
+    ],
+    "751": [
+      [
+        "751001",
+        "Gurazala"
+      ],
+      [
+        "751002",
+        "Narasaraopet"
+      ],
+      [
+        "751003",
+        "Sattenapalli"
+      ]
+    ],
+    "743": [
+      [
+        "743001",
+        "Palakonda"
+      ],
+      [
+        "743002",
+        "Parvathipuram"
+      ]
+    ],
+    "791": [
+      [
+        "791001",
+        "Chinturu"
+      ],
+      [
+        "791002",
+        "Rampachodavaram"
+      ]
+    ],
+    "517": [
+      [
+        "517001",
+        "Addanki"
+      ],
+      [
+        "517002",
+        "Kandukur"
+      ],
+      [
+        "517003",
+        "Ongole"
+      ]
+    ],
+    "519": [
+      [
+        "519001",
+        "Palasa"
+      ],
+      [
+        "519002",
+        "Srikakulam"
+      ],
+      [
+        "519003",
+        "Tekkali"
+      ]
+    ],
+    "515": [
+      [
+        "515001",
+        "Atmakur"
+      ],
+      [
+        "515002",
+        "Gudur"
+      ],
+      [
+        "515003",
+        "Kavali"
+      ],
+      [
+        "515004",
+        "Nellore"
+      ]
+    ],
+    "754": [
+      [
+        "754001",
+        "Dharmavaram"
+      ],
+      [
+        "754002",
+        "Kadiri"
+      ],
+      [
+        "754003",
+        "Madakasira"
+      ],
+      [
+        "754004",
+        "Penukonda"
+      ],
+      [
+        "754005",
+        "Puttaparthi"
+      ]
+    ],
+    "752": [
+      [
+        "752001",
+        "Srikalahasti"
+      ],
+      [
+        "752002",
+        "Sullurpeta"
+      ],
+      [
+        "752003",
+        "Tirupati"
+      ]
+    ],
+    "520": [
+      [
+        "520003",
+        "Anakapalli"
+      ],
+      [
+        "520001",
+        "Bheemunipatnam"
+      ],
+      [
+        "520002",
+        "Visakhapatnam"
+      ]
+    ],
+    "521": [
+      [
+        "521001",
+        "Bobbili"
+      ],
+      [
+        "521002",
+        "Cheepurupalle"
+      ],
+      [
+        "521003",
+        "Vizianagaram"
+      ]
+    ],
+    "523": [
+      [
+        "523001",
+        "Bhimavaram"
+      ],
+      [
+        "523002",
+        "Narasapuram"
+      ],
+      [
+        "523003",
+        "Tadepalligudem"
+      ]
+    ],
+    "504": [
+      [
+        "504001",
+        "Badvel"
+      ],
+      [
+        "504002",
+        "Jammalamadugu"
+      ],
+      [
+        "504003",
+        "Kadapa"
+      ],
+      [
+        "504004",
+        "Pulivendula"
+      ],
+      [
+        "504005",
+        "Rajampeta"
+      ]
+    ]
+  },
+  "ac_to_dists": {
+    "28": [
+      [
+        "745",
+        "Alluri Sitharama Raju",
+        "28-Arakuvalley"
+      ]
+    ],
+    "29": [
+      [
+        "745",
+        "Alluri Sitharama Raju",
+        "29-Paderu"
+      ]
+    ],
+    "26": [
+      [
+        "744",
+        "Anakapalli",
+        "26-Chodavaram"
+      ]
+    ],
+    "27": [
+      [
+        "744",
+        "Anakapalli",
+        "27-Madugula"
+      ]
+    ],
+    "30": [
+      [
+        "744",
+        "Anakapalli",
+        "30-Anakapalli"
+      ],
+      [
+        "520",
+        "Visakhapatnam",
+        "30-Anakapalli"
+      ]
+    ],
+    "31": [
+      [
+        "744",
+        "Anakapalli",
+        "31-Pendurthi"
+      ],
+      [
+        "520",
+        "Visakhapatnam",
+        "31-Pendurthi"
+      ]
+    ],
+    "32": [
+      [
+        "744",
+        "Anakapalli",
+        "32-Yelamanchili"
+      ]
+    ],
+    "33": [
+      [
+        "744",
+        "Anakapalli",
+        "33-Payakaraopeta"
+      ]
+    ],
+    "34": [
+      [
+        "744",
+        "Anakapalli",
+        "34-Narsipatnam"
+      ]
+    ],
+    "148": [
+      [
+        "502",
+        "Ananthapuramu",
+        "148-Rayadurg"
+      ]
+    ],
+    "149": [
+      [
+        "502",
+        "Ananthapuramu",
+        "149-Uravakonda"
+      ]
+    ],
+    "150": [
+      [
+        "502",
+        "Ananthapuramu",
+        "150-Guntakal"
+      ]
+    ],
+    "151": [
+      [
+        "502",
+        "Ananthapuramu",
+        "151-Tadipatri"
+      ]
+    ],
+    "152": [
+      [
+        "502",
+        "Ananthapuramu",
+        "152-Singanamala"
+      ]
+    ],
+    "153": [
+      [
+        "502",
+        "Ananthapuramu",
+        "153-Ananthapuram Urban"
+      ]
+    ],
+    "154": [
+      [
+        "502",
+        "Ananthapuramu",
+        "154-Kalyandurg"
+      ]
+    ],
+    "155": [
+      [
+        "502",
+        "Ananthapuramu",
+        "155-Raptadu"
+      ],
+      [
+        "754",
+        "Sri Sathya Sai",
+        "155-Raptadu"
+      ]
+    ],
+    "128": [
+      [
+        "753",
+        "Annamayya",
+        "128-Rayachoti"
+      ]
+    ],
+    "162": [
+      [
+        "753",
+        "Annamayya",
+        "162-Thamballapalle"
+      ]
+    ],
+    "163": [
+      [
+        "753",
+        "Annamayya",
+        "163-Pileru"
+      ]
+    ],
+    "164": [
+      [
+        "753",
+        "Annamayya",
+        "164-Madanapalle"
+      ]
+    ],
+    "165": [
+      [
+        "753",
+        "Annamayya",
+        "165-Punganur"
+      ],
+      [
+        "503",
+        "Chittoor",
+        "165-Punganur"
+      ]
+    ],
+    "89": [
+      [
+        "750",
+        "Bapatla",
+        "89-Vemuru"
+      ]
+    ],
+    "90": [
+      [
+        "750",
+        "Bapatla",
+        "90-Repalle"
+      ]
+    ],
+    "92": [
+      [
+        "750",
+        "Bapatla",
+        "92-Bapatla"
+      ]
+    ],
+    "104": [
+      [
+        "750",
+        "Bapatla",
+        "104-Parchur"
+      ]
+    ],
+    "106": [
+      [
+        "750",
+        "Bapatla",
+        "106-Chirala"
+      ]
+    ],
+    "170": [
+      [
+        "503",
+        "Chittoor",
+        "170-Nagari"
+      ],
+      [
+        "752",
+        "Tirupati",
+        "170-Nagari"
+      ]
+    ],
+    "171": [
+      [
+        "503",
+        "Chittoor",
+        "171-Gangadhara Nellore"
+      ]
+    ],
+    "172": [
+      [
+        "503",
+        "Chittoor",
+        "172-Chittoor"
+      ]
+    ],
+    "173": [
+      [
+        "503",
+        "Chittoor",
+        "173-Puthalapattu"
+      ]
+    ],
+    "174": [
+      [
+        "503",
+        "Chittoor",
+        "174-Palamaner"
+      ]
+    ],
+    "175": [
+      [
+        "503",
+        "Chittoor",
+        "175-Kuppam"
+      ]
+    ],
+    "42": [
+      [
+        "747",
+        "Dr B R Ambedkar Konaseema",
+        "42-Ramachandrapuram"
+      ],
+      [
+        "746",
+        "Kakinada",
+        "42-Ramachandrapuram"
+      ]
+    ],
+    "43": [
+      [
+        "747",
+        "Dr B R Ambedkar Konaseema",
+        "43-Mummidivaram"
+      ],
+      [
+        "746",
+        "Kakinada",
+        "43-Mummidivaram"
+      ]
+    ],
+    "44": [
+      [
+        "747",
+        "Dr B R Ambedkar Konaseema",
+        "44-Amalapuram"
+      ]
+    ],
+    "45": [
+      [
+        "747",
+        "Dr B R Ambedkar Konaseema",
+        "45-Razole"
+      ]
+    ],
+    "46": [
+      [
+        "747",
+        "Dr B R Ambedkar Konaseema",
+        "46-P Gannavaram"
+      ]
+    ],
+    "47": [
+      [
+        "747",
+        "Dr B R Ambedkar Konaseema",
+        "47-Kothapeta"
+      ]
+    ],
+    "40": [
+      [
+        "505",
+        "East Godavari",
+        "40-Anaparthi"
+      ],
+      [
+        "746",
+        "Kakinada",
+        "40-Anaparthi"
+      ]
+    ],
+    "48": [
+      [
+        "505",
+        "East Godavari",
+        "48-Mandapeta"
+      ]
+    ],
+    "49": [
+      [
+        "505",
+        "East Godavari",
+        "49-Rajanagaram"
+      ]
+    ],
+    "50": [
+      [
+        "505",
+        "East Godavari",
+        "50-Rajahmundry City"
+      ]
+    ],
+    "51": [
+      [
+        "505",
+        "East Godavari",
+        "51-Rajahmundry Rural"
+      ]
+    ],
+    "52": [
+      [
+        "505",
+        "East Godavari",
+        "52-Jaggampeta"
+      ],
+      [
+        "746",
+        "Kakinada",
+        "52-Jaggampeta"
+      ]
+    ],
+    "54": [
+      [
+        "505",
+        "East Godavari",
+        "54-Kovvur"
+      ]
+    ],
+    "55": [
+      [
+        "505",
+        "East Godavari",
+        "55-Nidadavole"
+      ]
+    ],
+    "66": [
+      [
+        "505",
+        "East Godavari",
+        "66-Gopalapuram"
+      ],
+      [
+        "748",
+        "Eluru",
+        "66-Gopalapuram"
+      ]
+    ],
+    "63": [
+      [
+        "748",
+        "Eluru",
+        "63-Unguturu"
+      ],
+      [
+        "523",
+        "West Godavari",
+        "63-Unguturu"
+      ]
+    ],
+    "64": [
+      [
+        "748",
+        "Eluru",
+        "64-Denduluru"
+      ]
+    ],
+    "65": [
+      [
+        "748",
+        "Eluru",
+        "65-Eluru"
+      ]
+    ],
+    "67": [
+      [
+        "748",
+        "Eluru",
+        "67-Polavaram"
+      ]
+    ],
+    "68": [
+      [
+        "748",
+        "Eluru",
+        "68-Chintalapudi"
+      ]
+    ],
+    "70": [
+      [
+        "748",
+        "Eluru",
+        "70-Nuzvid"
+      ]
+    ],
+    "73": [
+      [
+        "748",
+        "Eluru",
+        "73-Kaikalur"
+      ]
+    ],
+    "86": [
+      [
+        "506",
+        "Guntur",
+        "86-Tadikonda"
+      ]
+    ],
+    "87": [
+      [
+        "506",
+        "Guntur",
+        "87-Mangalagiri"
+      ]
+    ],
+    "88": [
+      [
+        "506",
+        "Guntur",
+        "88-Ponnuru"
+      ]
+    ],
+    "91": [
+      [
+        "506",
+        "Guntur",
+        "91-Tenali"
+      ]
+    ],
+    "93": [
+      [
+        "506",
+        "Guntur",
+        "93-Prathipadu"
+      ]
+    ],
+    "94": [
+      [
+        "506",
+        "Guntur",
+        "94-Guntur West"
+      ]
+    ],
+    "95": [
+      [
+        "506",
+        "Guntur",
+        "95-Guntur East"
+      ]
+    ],
+    "35": [
+      [
+        "746",
+        "Kakinada",
+        "35-Tuni"
+      ]
+    ],
+    "36": [
+      [
+        "746",
+        "Kakinada",
+        "36-Prathipadu"
+      ]
+    ],
+    "37": [
+      [
+        "746",
+        "Kakinada",
+        "37-Pithapuram"
+      ]
+    ],
+    "38": [
+      [
+        "746",
+        "Kakinada",
+        "38-Kakinada Rural"
+      ]
+    ],
+    "39": [
+      [
+        "746",
+        "Kakinada",
+        "39-Peddapuram"
+      ]
+    ],
+    "41": [
+      [
+        "746",
+        "Kakinada",
+        "41-Kakinada City"
+      ]
+    ],
+    "71": [
+      [
+        "510",
+        "Krishna",
+        "71-Gannavaram"
+      ],
+      [
+        "749",
+        "NTR",
+        "71-Gannavaram"
+      ]
+    ],
+    "72": [
+      [
+        "510",
+        "Krishna",
+        "72-Gudivada"
+      ]
+    ],
+    "74": [
+      [
+        "510",
+        "Krishna",
+        "74-Pedana"
+      ]
+    ],
+    "75": [
+      [
+        "510",
+        "Krishna",
+        "75-Machilipatnam"
+      ]
+    ],
+    "76": [
+      [
+        "510",
+        "Krishna",
+        "76-Avanigadda"
+      ]
+    ],
+    "77": [
+      [
+        "510",
+        "Krishna",
+        "77-Pamarru"
+      ]
+    ],
+    "78": [
+      [
+        "510",
+        "Krishna",
+        "78-Penamaluru"
+      ]
+    ],
+    "137": [
+      [
+        "511",
+        "Kurnool",
+        "137-Kurnool"
+      ]
+    ],
+    "138": [
+      [
+        "511",
+        "Kurnool",
+        "138-Panyam"
+      ],
+      [
+        "755",
+        "Nandyal",
+        "138-Panyam"
+      ]
+    ],
+    "142": [
+      [
+        "511",
+        "Kurnool",
+        "142-Pattikonda"
+      ]
+    ],
+    "143": [
+      [
+        "511",
+        "Kurnool",
+        "143-Kodumur"
+      ]
+    ],
+    "144": [
+      [
+        "511",
+        "Kurnool",
+        "144-Yemmiganur"
+      ]
+    ],
+    "145": [
+      [
+        "511",
+        "Kurnool",
+        "145-Mantralayam"
+      ]
+    ],
+    "146": [
+      [
+        "511",
+        "Kurnool",
+        "146-Adoni"
+      ]
+    ],
+    "147": [
+      [
+        "511",
+        "Kurnool",
+        "147-Alur"
+      ]
+    ],
+    "102": [
+      [
+        "790",
+        "Markapuram",
+        "102-Yerragondapalem"
+      ]
+    ],
+    "111": [
+      [
+        "790",
+        "Markapuram",
+        "111-Markapuram"
+      ]
+    ],
+    "112": [
+      [
+        "790",
+        "Markapuram",
+        "112-Giddalur"
+      ]
+    ],
+    "113": [
+      [
+        "790",
+        "Markapuram",
+        "113-Kanigiri"
+      ]
+    ],
+    "134": [
+      [
+        "755",
+        "Nandyal",
+        "134-Allagadda"
+      ]
+    ],
+    "135": [
+      [
+        "755",
+        "Nandyal",
+        "135-Srisailam"
+      ]
+    ],
+    "136": [
+      [
+        "755",
+        "Nandyal",
+        "136-Nandikotkur"
+      ]
+    ],
+    "139": [
+      [
+        "755",
+        "Nandyal",
+        "139-Nandyal"
+      ]
+    ],
+    "140": [
+      [
+        "755",
+        "Nandyal",
+        "140-Banaganapalle"
+      ]
+    ],
+    "141": [
+      [
+        "755",
+        "Nandyal",
+        "141-Dhone"
+      ]
+    ],
+    "69": [
+      [
+        "749",
+        "NTR",
+        "69-Tiruvuru"
+      ]
+    ],
+    "79": [
+      [
+        "749",
+        "NTR",
+        "79-Vijayawada West"
+      ]
+    ],
+    "80": [
+      [
+        "749",
+        "NTR",
+        "80-Vijayawada Central"
+      ]
+    ],
+    "81": [
+      [
+        "749",
+        "NTR",
+        "81-Vijayawada East"
+      ]
+    ],
+    "82": [
+      [
+        "749",
+        "NTR",
+        "82-Mylavaram"
+      ]
+    ],
+    "83": [
+      [
+        "749",
+        "NTR",
+        "83-Nandigama"
+      ]
+    ],
+    "84": [
+      [
+        "749",
+        "NTR",
+        "84-Jaggayyapeta"
+      ]
+    ],
+    "85": [
+      [
+        "751",
+        "Palnadu",
+        "85-Pedakurapadu"
+      ]
+    ],
+    "96": [
+      [
+        "751",
+        "Palnadu",
+        "96-Chilakaluripet"
+      ]
+    ],
+    "97": [
+      [
+        "751",
+        "Palnadu",
+        "97-Narasaraopet"
+      ]
+    ],
+    "98": [
+      [
+        "751",
+        "Palnadu",
+        "98-Sattenapalle"
+      ]
+    ],
+    "99": [
+      [
+        "751",
+        "Palnadu",
+        "99-Vinukonda"
+      ]
+    ],
+    "100": [
+      [
+        "751",
+        "Palnadu",
+        "100-Gurajala"
+      ]
+    ],
+    "101": [
+      [
+        "751",
+        "Palnadu",
+        "101-Macherla"
+      ]
+    ],
+    "10": [
+      [
+        "743",
+        "Parvathipuram Manyam",
+        "10-Palakonda"
+      ]
+    ],
+    "11": [
+      [
+        "743",
+        "Parvathipuram Manyam",
+        "11-Kurupam"
+      ]
+    ],
+    "12": [
+      [
+        "743",
+        "Parvathipuram Manyam",
+        "12-Parvathipuram"
+      ]
+    ],
+    "13": [
+      [
+        "743",
+        "Parvathipuram Manyam",
+        "13-Salur"
+      ],
+      [
+        "521",
+        "Vizianagaram",
+        "13-Salur"
+      ]
+    ],
+    "53": [
+      [
+        "791",
+        "Polavaram",
+        "53-Rampachodavaram"
+      ]
+    ],
+    "103": [
+      [
+        "517",
+        "Prakasam",
+        "103-Darsi"
+      ]
+    ],
+    "105": [
+      [
+        "517",
+        "Prakasam",
+        "105-Addanki"
+      ]
+    ],
+    "107": [
+      [
+        "517",
+        "Prakasam",
+        "107-Santhanuthulapadu"
+      ]
+    ],
+    "108": [
+      [
+        "517",
+        "Prakasam",
+        "108-Ongole"
+      ]
+    ],
+    "109": [
+      [
+        "517",
+        "Prakasam",
+        "109-Kandukur"
+      ]
+    ],
+    "110": [
+      [
+        "517",
+        "Prakasam",
+        "110-Kondapi"
+      ]
+    ],
+    "1": [
+      [
+        "519",
+        "Srikakulam",
+        "1-Ichchapuram"
+      ]
+    ],
+    "2": [
+      [
+        "519",
+        "Srikakulam",
+        "2-Palasa"
+      ]
+    ],
+    "3": [
+      [
+        "519",
+        "Srikakulam",
+        "3-Tekkali"
+      ]
+    ],
+    "4": [
+      [
+        "519",
+        "Srikakulam",
+        "4-Pathapatnam"
+      ]
+    ],
+    "5": [
+      [
+        "519",
+        "Srikakulam",
+        "5-Srikakulam"
+      ]
+    ],
+    "6": [
+      [
+        "519",
+        "Srikakulam",
+        "6-Amadalavalasa"
+      ]
+    ],
+    "7": [
+      [
+        "519",
+        "Srikakulam",
+        "7-Etcherla"
+      ]
+    ],
+    "8": [
+      [
+        "519",
+        "Srikakulam",
+        "8-Narasannapeta"
+      ]
+    ],
+    "114": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "114-Kavali"
+      ]
+    ],
+    "115": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "115-Atmakur"
+      ]
+    ],
+    "116": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "116-Kovur"
+      ]
+    ],
+    "117": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "117-Nellore City"
+      ]
+    ],
+    "118": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "118-Nellore Rural"
+      ]
+    ],
+    "119": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "119-Sarvepalli"
+      ]
+    ],
+    "120": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "120-Gudur"
+      ],
+      [
+        "752",
+        "Tirupati",
+        "120-Gudur"
+      ]
+    ],
+    "122": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "122-Venkatagiri"
+      ],
+      [
+        "752",
+        "Tirupati",
+        "122-Venkatagiri"
+      ]
+    ],
+    "123": [
+      [
+        "515",
+        "Sri Potti Sreeramulu Nellore",
+        "123-Udayagiri"
+      ]
+    ],
+    "156": [
+      [
+        "754",
+        "Sri Sathya Sai",
+        "156-Madakasira"
+      ]
+    ],
+    "157": [
+      [
+        "754",
+        "Sri Sathya Sai",
+        "157-Hindupur"
+      ]
+    ],
+    "158": [
+      [
+        "754",
+        "Sri Sathya Sai",
+        "158-Penukonda"
+      ]
+    ],
+    "159": [
+      [
+        "754",
+        "Sri Sathya Sai",
+        "159-Puttaparthi"
+      ]
+    ],
+    "160": [
+      [
+        "754",
+        "Sri Sathya Sai",
+        "160-Dharmavaram"
+      ]
+    ],
+    "161": [
+      [
+        "754",
+        "Sri Sathya Sai",
+        "161-Kadiri"
+      ]
+    ],
+    "121": [
+      [
+        "752",
+        "Tirupati",
+        "121-Sullurpeta"
+      ]
+    ],
+    "127": [
+      [
+        "752",
+        "Tirupati",
+        "127-Kodur"
+      ]
+    ],
+    "166": [
+      [
+        "752",
+        "Tirupati",
+        "166-Chandragiri"
+      ]
+    ],
+    "167": [
+      [
+        "752",
+        "Tirupati",
+        "167-Tirupati"
+      ]
+    ],
+    "168": [
+      [
+        "752",
+        "Tirupati",
+        "168-Srikalahasti"
+      ]
+    ],
+    "169": [
+      [
+        "752",
+        "Tirupati",
+        "169-Satyavedu"
+      ]
+    ],
+    "20": [
+      [
+        "520",
+        "Visakhapatnam",
+        "20-Bheemili"
+      ]
+    ],
+    "21": [
+      [
+        "520",
+        "Visakhapatnam",
+        "21-Visakhapatnam East"
+      ]
+    ],
+    "22": [
+      [
+        "520",
+        "Visakhapatnam",
+        "22-Visakhapatnam South"
+      ]
+    ],
+    "23": [
+      [
+        "520",
+        "Visakhapatnam",
+        "23-Visakhapatnam North"
+      ]
+    ],
+    "24": [
+      [
+        "520",
+        "Visakhapatnam",
+        "24-Visakhapatnam West"
+      ]
+    ],
+    "25": [
+      [
+        "520",
+        "Visakhapatnam",
+        "25-Gajuwaka"
+      ]
+    ],
+    "9": [
+      [
+        "521",
+        "Vizianagaram",
+        "9-Rajam"
+      ]
+    ],
+    "14": [
+      [
+        "521",
+        "Vizianagaram",
+        "14-Bobbili"
+      ]
+    ],
+    "15": [
+      [
+        "521",
+        "Vizianagaram",
+        "15-Cheepurupalli"
+      ]
+    ],
+    "16": [
+      [
+        "521",
+        "Vizianagaram",
+        "16-Gajapathinagaram"
+      ]
+    ],
+    "17": [
+      [
+        "521",
+        "Vizianagaram",
+        "17-Nellimarla"
+      ]
+    ],
+    "18": [
+      [
+        "521",
+        "Vizianagaram",
+        "18-Vizianagaram"
+      ]
+    ],
+    "19": [
+      [
+        "521",
+        "Vizianagaram",
+        "19-Srungavarapukota"
+      ]
+    ],
+    "56": [
+      [
+        "523",
+        "West Godavari",
+        "56-Achanta"
+      ]
+    ],
+    "57": [
+      [
+        "523",
+        "West Godavari",
+        "57-Palacole"
+      ]
+    ],
+    "58": [
+      [
+        "523",
+        "West Godavari",
+        "58-Narsaapuram"
+      ]
+    ],
+    "59": [
+      [
+        "523",
+        "West Godavari",
+        "59-Bhimavaram"
+      ]
+    ],
+    "60": [
+      [
+        "523",
+        "West Godavari",
+        "60-Undi"
+      ]
+    ],
+    "61": [
+      [
+        "523",
+        "West Godavari",
+        "61-Tanuku"
+      ]
+    ],
+    "62": [
+      [
+        "523",
+        "West Godavari",
+        "62-Tadepalligudem"
+      ]
+    ],
+    "124": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "124-Badvel"
+      ]
+    ],
+    "125": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "125-Rajampeta"
+      ]
+    ],
+    "126": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "126-Kadapa"
+      ]
+    ],
+    "129": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "129-Pulivendula"
+      ]
+    ],
+    "130": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "130-Kamalapuram"
+      ]
+    ],
+    "131": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "131-Jammalamadugu"
+      ]
+    ],
+    "132": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "132-Proddutur"
+      ]
+    ],
+    "133": [
+      [
+        "504",
+        "Y S R Kadapa",
+        "133-Mydukur"
+      ]
+    ]
+  }
+}

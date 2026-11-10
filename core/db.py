@@ -7,9 +7,11 @@ DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 def init_db():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=30)
     cur = conn.cursor()
-    
+
+    cur.execute("PRAGMA journal_mode=WAL;")
+
     # Constituencies table
     cur.execute("""
     CREATE TABLE IF NOT EXISTS constituencies (
@@ -18,7 +20,7 @@ def init_db():
         ac_name TEXT,
         district_id TEXT,
         district_name TEXT,
-        status TEXT DEFAULT 'PENDING',  -- PENDING, LEASED, IN_PROGRESS, COMPLETED, SYNCED
+        status TEXT DEFAULT 'PENDING',
         total_gps INTEGER DEFAULT 0,
         completed_gps INTEGER DEFAULT 0,
         total_voters INTEGER DEFAULT 0,
@@ -29,7 +31,7 @@ def init_db():
         updated_at REAL
     )
     """)
-    
+
     # Gram Panchayats table
     cur.execute("""
     CREATE TABLE IF NOT EXISTS gram_panchayats (
@@ -41,11 +43,67 @@ def init_db():
         gp_name_te TEXT,
         official_voters INTEGER DEFAULT 0,
         harvested_voters INTEGER DEFAULT 0,
-        status TEXT DEFAULT 'PENDING',  -- PENDING, IN_PROGRESS, COMPLETED
+        male_voters INTEGER DEFAULT 0,
+        female_voters INTEGER DEFAULT 0,
+        other_voters INTEGER DEFAULT 0,
+        wards_count INTEGER DEFAULT 0,
+        dpo_confirmed INTEGER DEFAULT 0,
+        status TEXT DEFAULT 'PENDING',
         assigned_node TEXT,
         lease_expires_at REAL DEFAULT 0,
         updated_at REAL,
         FOREIGN KEY (ac_no) REFERENCES constituencies (ac_no)
+    )
+    """)
+
+    # Safe column migrations for existing gram_panchayats table
+    for col_def in [
+        "male_voters INTEGER DEFAULT 0",
+        "female_voters INTEGER DEFAULT 0",
+        "other_voters INTEGER DEFAULT 0",
+        "wards_count INTEGER DEFAULT 0",
+        "dpo_confirmed INTEGER DEFAULT 0",
+        "district_id TEXT",
+        "rev_div_id TEXT"
+    ]:
+        col_name = col_def.split()[0]
+        try:
+            cur.execute(f"ALTER TABLE gram_panchayats ADD COLUMN {col_def}")
+        except sqlite3.OperationalError:
+            pass
+
+    # MPTC Delimitation Mappings table (MPTC -> GP -> Ward Ranges)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS mptc_mappings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        district_id TEXT,
+        mandal_id TEXT,
+        mandal_name TEXT,
+        mptc_id TEXT,
+        mptc_name TEXT,
+        gp_id TEXT,
+        gp_name TEXT,
+        wards_range TEXT,
+        ac_no INTEGER,
+        updated_at REAL,
+        UNIQUE(mandal_id, mptc_id, gp_id, wards_range)
+    )
+    """)
+
+    # GP Ward-level Voter Strengths table
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS ward_strengths (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        ac_no INTEGER,
+        mandal_id TEXT,
+        gp_id TEXT,
+        ward_no TEXT,
+        male_voters INTEGER DEFAULT 0,
+        female_voters INTEGER DEFAULT 0,
+        other_voters INTEGER DEFAULT 0,
+        total_voters INTEGER DEFAULT 0,
+        updated_at REAL,
+        UNIQUE(gp_id, ward_no)
     )
     """)
 
@@ -67,25 +125,5 @@ def init_db():
     conn.close()
     print(f"[DB] Initialized distributed registry at: {DB_PATH}")
 
-def seed_constituencies_from_config(config_path):
-    with open(config_path, "r", encoding="utf-8") as f:
-        meta = json.load(f)
-    
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    
-    for ac in meta.get("sample_constituencies", []):
-        cur.execute("""
-        INSERT OR IGNORE INTO constituencies (ac_no, ac_slug, ac_name, district_id, district_name, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """, (ac["ac_no"], ac["ac_slug"], ac["ac_name"], ac["district_id"], ac["district_name"], time.time()))
-
-    conn.commit()
-    conn.close()
-    print("[DB] Seeded initial constituencies into coordinator registry.")
-
 if __name__ == "__main__":
     init_db()
-    cfg = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "configs", "state_metadata.json")
-    if os.path.exists(cfg):
-        seed_constituencies_from_config(cfg)
