@@ -2,32 +2,110 @@
   "project_name": "ap-election-distributed-engine",
   "version": "1.0.0",
   "districts": [
-    {"dist_id": "746", "dist_name": "Kakinada"},
-    {"dist_id": "505", "dist_name": "East Godavari"},
-    {"dist_id": "747", "dist_name": "Dr B R Ambedkar Konaseema"},
-    {"dist_id": "791", "dist_name": "Alluri Sitharama Raju"},
-    {"dist_id": "506", "dist_name": "West Godavari"},
-    {"dist_id": "748", "dist_name": "Eluru"},
-    {"dist_id": "510", "dist_name": "Krishna"},
-    {"dist_id": "749", "dist_name": "NTR"},
-    {"dist_id": "507", "dist_name": "Guntur"},
-    {"dist_id": "750", "dist_name": "Bapatla"},
-    {"dist_id": "751", "dist_name": "Palnadu"},
-    {"dist_id": "511", "dist_name": "Prakasam"},
-    {"dist_id": "515", "dist_name": "SPSR Nellore"},
-    {"dist_id": "504", "dist_name": "Chittoor"},
-    {"dist_id": "754", "dist_name": "Tirupati"},
-    {"dist_id": "753", "dist_name": "Annamayya"},
-    {"dist_id": "503", "dist_name": "YSR Kadapa"},
-    {"dist_id": "502", "dist_name": "Ananthapuramu"},
-    {"dist_id": "752", "dist_name": "Sri Sathya Sai"},
-    {"dist_id": "512", "dist_name": "Kurnool"},
-    {"dist_id": "755", "dist_name": "Nandyal"},
-    {"dist_id": "517", "dist_name": "Visakhapatnam"},
-    {"dist_id": "745", "dist_name": "Anakapalli"},
-    {"dist_id": "518", "dist_name": "Vizianagaram"},
-    {"dist_id": "744", "dist_name": "Parvathipuram Manyam"},
-    {"dist_id": "516", "dist_name": "Srikakulam"}
+    {
+      "dist_id": "746",
+      "dist_name": "Kakinada"
+    },
+    {
+      "dist_id": "505",
+      "dist_name": "East Godavari"
+    },
+    {
+      "dist_id": "747",
+      "dist_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "dist_id": "791",
+      "dist_name": "Alluri Sitharama Raju"
+    },
+    {
+      "dist_id": "506",
+      "dist_name": "West Godavari"
+    },
+    {
+      "dist_id": "748",
+      "dist_name": "Eluru"
+    },
+    {
+      "dist_id": "510",
+      "dist_name": "Krishna"
+    },
+    {
+      "dist_id": "749",
+      "dist_name": "NTR"
+    },
+    {
+      "dist_id": "507",
+      "dist_name": "Guntur"
+    },
+    {
+      "dist_id": "750",
+      "dist_name": "Bapatla"
+    },
+    {
+      "dist_id": "751",
+      "dist_name": "Palnadu"
+    },
+    {
+      "dist_id": "511",
+      "dist_name": "Prakasam"
+    },
+    {
+      "dist_id": "515",
+      "dist_name": "SPSR Nellore"
+    },
+    {
+      "dist_id": "504",
+      "dist_name": "Chittoor"
+    },
+    {
+      "dist_id": "754",
+      "dist_name": "Tirupati"
+    },
+    {
+      "dist_id": "753",
+      "dist_name": "Annamayya"
+    },
+    {
+      "dist_id": "503",
+      "dist_name": "YSR Kadapa"
+    },
+    {
+      "dist_id": "502",
+      "dist_name": "Ananthapuramu"
+    },
+    {
+      "dist_id": "752",
+      "dist_name": "Sri Sathya Sai"
+    },
+    {
+      "dist_id": "512",
+      "dist_name": "Kurnool"
+    },
+    {
+      "dist_id": "755",
+      "dist_name": "Nandyal"
+    },
+    {
+      "dist_id": "517",
+      "dist_name": "Visakhapatnam"
+    },
+    {
+      "dist_id": "745",
+      "dist_name": "Anakapalli"
+    },
+    {
+      "dist_id": "518",
+      "dist_name": "Vizianagaram"
+    },
+    {
+      "dist_id": "744",
+      "dist_name": "Parvathipuram Manyam"
+    },
+    {
+      "dist_id": "516",
+      "dist_name": "Srikakulam"
+    }
   ],
   "sample_constituencies": [
     {
@@ -37,9 +115,18 @@
       "district_id": "746",
       "district_name": "Kakinada",
       "mandals": [
-        {"mandal_id": "5253", "mandal_name": "Pithapuram"},
-        {"mandal_id": "5230", "mandal_name": "Gollaprolu"},
-        {"mandal_id": "5242", "mandal_name": "U Kothapalli"}
+        {
+          "mandal_id": "5253",
+          "mandal_name": "Pithapuram"
+        },
+        {
+          "mandal_id": "5230",
+          "mandal_name": "Gollaprolu"
+        },
+        {
+          "mandal_id": "5242",
+          "mandal_name": "U Kothapalli"
+        }
       ]
     },
     {
@@ -49,8 +136,14 @@
       "district_id": "746",
       "district_name": "Kakinada",
       "mandals": [
-        {"mandal_id": "5252", "mandal_name": "Peddapuram Rural"},
-        {"mandal_id": "5265", "mandal_name": "Samalkota Rural"}
+        {
+          "mandal_id": "5252",
+          "mandal_name": "Peddapuram Rural"
+        },
+        {
+          "mandal_id": "5265",
+          "mandal_name": "Samalkota Rural"
+        }
       ]
     },
     {
@@ -60,8 +153,14 @@
       "district_id": "746",
       "district_name": "Kakinada",
       "mandals": [
-        {"mandal_id": "5235", "mandal_name": "Kakinada Rural"},
-        {"mandal_id": "5237", "mandal_name": "Karapa"}
+        {
+          "mandal_id": "5235",
+          "mandal_name": "Kakinada Rural"
+        },
+        {
+          "mandal_id": "5237",
+          "mandal_name": "Karapa"
+        }
       ]
     },
     {
@@ -71,9 +170,18 @@
       "district_id": "746",
       "district_name": "Kakinada",
       "mandals": [
-        {"mandal_id": "5270", "mandal_name": "Tuni"},
-        {"mandal_id": "5241", "mandal_name": "Kotananduru"},
-        {"mandal_id": "5269", "mandal_name": "Thondangi"}
+        {
+          "mandal_id": "5270",
+          "mandal_name": "Tuni"
+        },
+        {
+          "mandal_id": "5241",
+          "mandal_name": "Kotananduru"
+        },
+        {
+          "mandal_id": "5269",
+          "mandal_name": "Thondangi"
+        }
       ]
     },
     {
@@ -83,10 +191,22 @@
       "district_id": "746",
       "district_name": "Kakinada",
       "mandals": [
-        {"mandal_id": "5254", "mandal_name": "Prathipadu"},
-        {"mandal_id": "5266", "mandal_name": "Sankhavaram"},
-        {"mandal_id": "5273", "mandal_name": "Yeleswaram"},
-        {"mandal_id": "6802", "mandal_name": "Routhulapudi"}
+        {
+          "mandal_id": "5254",
+          "mandal_name": "Prathipadu"
+        },
+        {
+          "mandal_id": "5266",
+          "mandal_name": "Sankhavaram"
+        },
+        {
+          "mandal_id": "5273",
+          "mandal_name": "Yeleswaram"
+        },
+        {
+          "mandal_id": "6802",
+          "mandal_name": "Routhulapudi"
+        }
       ]
     },
     {
@@ -96,11 +216,1252 @@
       "district_id": "746",
       "district_name": "Kakinada",
       "mandals": [
-        {"mandal_id": "5232", "mandal_name": "Jaggampeta"},
-        {"mandal_id": "5227", "mandal_name": "Gandepalle"},
-        {"mandal_id": "5239", "mandal_name": "Kirlampudi"},
-        {"mandal_id": "5229", "mandal_name": "Gokavaram"}
+        {
+          "mandal_id": "5232",
+          "mandal_name": "Jaggampeta"
+        },
+        {
+          "mandal_id": "5227",
+          "mandal_name": "Gandepalle"
+        },
+        {
+          "mandal_id": "5239",
+          "mandal_name": "Kirlampudi"
+        },
+        {
+          "mandal_id": "5229",
+          "mandal_name": "Gokavaram"
+        }
       ]
     }
-  ]
+  ],
+  "constituencies": [
+    {
+      "ac_no": 1,
+      "ac_slug": "01_Ichchapuram",
+      "ac_name": "Ichchapuram",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 2,
+      "ac_slug": "02_Palasa",
+      "ac_name": "Palasa",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 3,
+      "ac_slug": "03_Tekkali",
+      "ac_name": "Tekkali",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 4,
+      "ac_slug": "04_Pathapatnam",
+      "ac_name": "Pathapatnam",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 5,
+      "ac_slug": "05_Srikakulam",
+      "ac_name": "Srikakulam",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 6,
+      "ac_slug": "06_Amadalavalasa",
+      "ac_name": "Amadalavalasa",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 7,
+      "ac_slug": "07_Etcherla",
+      "ac_name": "Etcherla",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 8,
+      "ac_slug": "08_Narasannapeta",
+      "ac_name": "Narasannapeta",
+      "district_id": "516",
+      "district_name": "Srikakulam"
+    },
+    {
+      "ac_no": 9,
+      "ac_slug": "09_Rajam_SC",
+      "ac_name": "Rajam (SC)",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 10,
+      "ac_slug": "10_Palakonda_ST",
+      "ac_name": "Palakonda (ST)",
+      "district_id": "744",
+      "district_name": "Parvathipuram Manyam"
+    },
+    {
+      "ac_no": 11,
+      "ac_slug": "11_Kurupam_ST",
+      "ac_name": "Kurupam (ST)",
+      "district_id": "744",
+      "district_name": "Parvathipuram Manyam"
+    },
+    {
+      "ac_no": 12,
+      "ac_slug": "12_Parvathipuram_SC",
+      "ac_name": "Parvathipuram (SC)",
+      "district_id": "744",
+      "district_name": "Parvathipuram Manyam"
+    },
+    {
+      "ac_no": 13,
+      "ac_slug": "13_Salur_ST",
+      "ac_name": "Salur (ST)",
+      "district_id": "744",
+      "district_name": "Parvathipuram Manyam"
+    },
+    {
+      "ac_no": 14,
+      "ac_slug": "14_Bobbili",
+      "ac_name": "Bobbili",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 15,
+      "ac_slug": "15_Cheepurupalle",
+      "ac_name": "Cheepurupalle",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 16,
+      "ac_slug": "16_Gajapathinagaram",
+      "ac_name": "Gajapathinagaram",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 17,
+      "ac_slug": "17_Nellimarla",
+      "ac_name": "Nellimarla",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 18,
+      "ac_slug": "18_Vizianagaram",
+      "ac_name": "Vizianagaram",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 19,
+      "ac_slug": "19_Srungavarapukota",
+      "ac_name": "Srungavarapukota",
+      "district_id": "518",
+      "district_name": "Vizianagaram"
+    },
+    {
+      "ac_no": 20,
+      "ac_slug": "20_Bhimili",
+      "ac_name": "Bhimili",
+      "district_id": "517",
+      "district_name": "Visakhapatnam"
+    },
+    {
+      "ac_no": 21,
+      "ac_slug": "21_Visakhapatnam_East",
+      "ac_name": "Visakhapatnam East",
+      "district_id": "517",
+      "district_name": "Visakhapatnam"
+    },
+    {
+      "ac_no": 22,
+      "ac_slug": "22_Visakhapatnam_South",
+      "ac_name": "Visakhapatnam South",
+      "district_id": "517",
+      "district_name": "Visakhapatnam"
+    },
+    {
+      "ac_no": 23,
+      "ac_slug": "23_Visakhapatnam_North",
+      "ac_name": "Visakhapatnam North",
+      "district_id": "517",
+      "district_name": "Visakhapatnam"
+    },
+    {
+      "ac_no": 24,
+      "ac_slug": "24_Visakhapatnam_West",
+      "ac_name": "Visakhapatnam West",
+      "district_id": "517",
+      "district_name": "Visakhapatnam"
+    },
+    {
+      "ac_no": 25,
+      "ac_slug": "25_Gajuwaka",
+      "ac_name": "Gajuwaka",
+      "district_id": "517",
+      "district_name": "Visakhapatnam"
+    },
+    {
+      "ac_no": 26,
+      "ac_slug": "26_Chodavaram",
+      "ac_name": "Chodavaram",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 27,
+      "ac_slug": "27_Madugula",
+      "ac_name": "Madugula",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 28,
+      "ac_slug": "28_Araku_Valley_ST",
+      "ac_name": "Araku Valley (ST)",
+      "district_id": "791",
+      "district_name": "Alluri Sitharama Raju"
+    },
+    {
+      "ac_no": 29,
+      "ac_slug": "29_Paderu_ST",
+      "ac_name": "Paderu (ST)",
+      "district_id": "791",
+      "district_name": "Alluri Sitharama Raju"
+    },
+    {
+      "ac_no": 30,
+      "ac_slug": "30_Anakapalle",
+      "ac_name": "Anakapalle",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 31,
+      "ac_slug": "31_Pendurthi",
+      "ac_name": "Pendurthi",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 32,
+      "ac_slug": "32_Yelamanchili",
+      "ac_name": "Yelamanchili",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 33,
+      "ac_slug": "33_Payakaraopet_SC",
+      "ac_name": "Payakaraopet (SC)",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 34,
+      "ac_slug": "34_Narsipatnam",
+      "ac_name": "Narsipatnam",
+      "district_id": "745",
+      "district_name": "Anakapalli"
+    },
+    {
+      "ac_no": 35,
+      "ac_slug": "35_Tuni",
+      "ac_name": "Tuni",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 36,
+      "ac_slug": "36_Prathipadu",
+      "ac_name": "Prathipadu",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 37,
+      "ac_slug": "37_Pithapuram",
+      "ac_name": "Pithapuram",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 38,
+      "ac_slug": "38_Kakinada_Rural",
+      "ac_name": "Kakinada Rural",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 39,
+      "ac_slug": "39_Peddapuram",
+      "ac_name": "Peddapuram",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 40,
+      "ac_slug": "40_Anaparthy",
+      "ac_name": "Anaparthy",
+      "district_id": "505",
+      "district_name": "East Godavari"
+    },
+    {
+      "ac_no": 41,
+      "ac_slug": "41_Kakinada_City",
+      "ac_name": "Kakinada City",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 42,
+      "ac_slug": "42_Ramachandrapuram",
+      "ac_name": "Ramachandrapuram",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 43,
+      "ac_slug": "43_Mummidivaram",
+      "ac_name": "Mummidivaram",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 44,
+      "ac_slug": "44_Amalapuram_SC",
+      "ac_name": "Amalapuram (SC)",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 45,
+      "ac_slug": "45_Razole_SC",
+      "ac_name": "Razole (SC)",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 46,
+      "ac_slug": "46_Gannavaram_SC",
+      "ac_name": "Gannavaram (SC)",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 47,
+      "ac_slug": "47_Kothapeta",
+      "ac_name": "Kothapeta",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 48,
+      "ac_slug": "48_Mandapeta",
+      "ac_name": "Mandapeta",
+      "district_id": "747",
+      "district_name": "Dr B R Ambedkar Konaseema"
+    },
+    {
+      "ac_no": 49,
+      "ac_slug": "49_Rajanagaram",
+      "ac_name": "Rajanagaram",
+      "district_id": "505",
+      "district_name": "East Godavari"
+    },
+    {
+      "ac_no": 50,
+      "ac_slug": "50_Rajahmundry_City",
+      "ac_name": "Rajahmundry City",
+      "district_id": "505",
+      "district_name": "East Godavari"
+    },
+    {
+      "ac_no": 51,
+      "ac_slug": "51_Rajahmundry_Rural",
+      "ac_name": "Rajahmundry Rural",
+      "district_id": "505",
+      "district_name": "East Godavari"
+    },
+    {
+      "ac_no": 52,
+      "ac_slug": "52_Jaggampeta",
+      "ac_name": "Jaggampeta",
+      "district_id": "746",
+      "district_name": "Kakinada"
+    },
+    {
+      "ac_no": 53,
+      "ac_slug": "53_Rampachodavaram_ST",
+      "ac_name": "Rampachodavaram (ST)",
+      "district_id": "791",
+      "district_name": "Alluri Sitharama Raju"
+    },
+    {
+      "ac_no": 54,
+      "ac_slug": "54_Kovvur_SC",
+      "ac_name": "Kovvur (SC)",
+      "district_id": "505",
+      "district_name": "East Godavari"
+    },
+    {
+      "ac_no": 55,
+      "ac_slug": "55_Nidadavole",
+      "ac_name": "Nidadavole",
+      "district_id": "505",
+      "district_name": "East Godavari"
+    },
+    {
+      "ac_no": 56,
+      "ac_slug": "56_Achanta",
+      "ac_name": "Achanta",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 57,
+      "ac_slug": "57_Palacole",
+      "ac_name": "Palacole",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 58,
+      "ac_slug": "58_Narasapuram",
+      "ac_name": "Narasapuram",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 59,
+      "ac_slug": "59_Bhimavaram",
+      "ac_name": "Bhimavaram",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 60,
+      "ac_slug": "60_Undi",
+      "ac_name": "Undi",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 61,
+      "ac_slug": "61_Tanuku",
+      "ac_name": "Tanuku",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 62,
+      "ac_slug": "62_Tadepalligudem",
+      "ac_name": "Tadepalligudem",
+      "district_id": "506",
+      "district_name": "West Godavari"
+    },
+    {
+      "ac_no": 63,
+      "ac_slug": "63_Ungutur",
+      "ac_name": "Ungutur",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 64,
+      "ac_slug": "64_Denduluru",
+      "ac_name": "Denduluru",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 65,
+      "ac_slug": "65_Eluru",
+      "ac_name": "Eluru",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 66,
+      "ac_slug": "66_Gopalapuram_SC",
+      "ac_name": "Gopalapuram (SC)",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 67,
+      "ac_slug": "67_Polavaram_ST",
+      "ac_name": "Polavaram (ST)",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 68,
+      "ac_slug": "68_Chintalapudi_SC",
+      "ac_name": "Chintalapudi (SC)",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 69,
+      "ac_slug": "69_Tiruvuru_SC",
+      "ac_name": "Tiruvuru (SC)",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 70,
+      "ac_slug": "70_Nuzvid",
+      "ac_name": "Nuzvid",
+      "district_id": "748",
+      "district_name": "Eluru"
+    },
+    {
+      "ac_no": 71,
+      "ac_slug": "71_Gannavaram",
+      "ac_name": "Gannavaram",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 72,
+      "ac_slug": "72_Gudivada",
+      "ac_name": "Gudivada",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 73,
+      "ac_slug": "73_Kaikalur",
+      "ac_name": "Kaikalur",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 74,
+      "ac_slug": "74_Pedana",
+      "ac_name": "Pedana",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 75,
+      "ac_slug": "75_Machilipatnam",
+      "ac_name": "Machilipatnam",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 76,
+      "ac_slug": "76_Avanigadda",
+      "ac_name": "Avanigadda",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 77,
+      "ac_slug": "77_Pamarru_SC",
+      "ac_name": "Pamarru (SC)",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 78,
+      "ac_slug": "78_Penamaluru",
+      "ac_name": "Penamaluru",
+      "district_id": "510",
+      "district_name": "Krishna"
+    },
+    {
+      "ac_no": 79,
+      "ac_slug": "79_Vijayawada_West",
+      "ac_name": "Vijayawada West",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 80,
+      "ac_slug": "80_Vijayawada_Central",
+      "ac_name": "Vijayawada Central",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 81,
+      "ac_slug": "81_Vijayawada_East",
+      "ac_name": "Vijayawada East",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 82,
+      "ac_slug": "82_Mylavaram",
+      "ac_name": "Mylavaram",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 83,
+      "ac_slug": "83_Nandigama_SC",
+      "ac_name": "Nandigama (SC)",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 84,
+      "ac_slug": "84_Jaggayyapeta",
+      "ac_name": "Jaggayyapeta",
+      "district_id": "749",
+      "district_name": "NTR"
+    },
+    {
+      "ac_no": 85,
+      "ac_slug": "85_Pedakurapadu",
+      "ac_name": "Pedakurapadu",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 86,
+      "ac_slug": "86_Tadikonda_SC",
+      "ac_name": "Tadikonda (SC)",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 87,
+      "ac_slug": "87_Mangalagiri",
+      "ac_name": "Mangalagiri",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 88,
+      "ac_slug": "88_Ponnur",
+      "ac_name": "Ponnur",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 89,
+      "ac_slug": "89_Vemuru_SC",
+      "ac_name": "Vemuru (SC)",
+      "district_id": "750",
+      "district_name": "Bapatla"
+    },
+    {
+      "ac_no": 90,
+      "ac_slug": "90_Repalle",
+      "ac_name": "Repalle",
+      "district_id": "750",
+      "district_name": "Bapatla"
+    },
+    {
+      "ac_no": 91,
+      "ac_slug": "91_Tenali",
+      "ac_name": "Tenali",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 92,
+      "ac_slug": "92_Bapatla",
+      "ac_name": "Bapatla",
+      "district_id": "750",
+      "district_name": "Bapatla"
+    },
+    {
+      "ac_no": 93,
+      "ac_slug": "93_Prathipadu_SC",
+      "ac_name": "Prathipadu (SC)",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 94,
+      "ac_slug": "94_Guntur_West",
+      "ac_name": "Guntur West",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 95,
+      "ac_slug": "95_Guntur_East",
+      "ac_name": "Guntur East",
+      "district_id": "507",
+      "district_name": "Guntur"
+    },
+    {
+      "ac_no": 96,
+      "ac_slug": "96_Chilakaluripet",
+      "ac_name": "Chilakaluripet",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 97,
+      "ac_slug": "97_Narasaraopet",
+      "ac_name": "Narasaraopet",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 98,
+      "ac_slug": "98_Sattenapalle",
+      "ac_name": "Sattenapalle",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 99,
+      "ac_slug": "99_Vinukonda",
+      "ac_name": "Vinukonda",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 100,
+      "ac_slug": "100_Gurajala",
+      "ac_name": "Gurajala",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 101,
+      "ac_slug": "101_Macherla",
+      "ac_name": "Macherla",
+      "district_id": "751",
+      "district_name": "Palnadu"
+    },
+    {
+      "ac_no": 102,
+      "ac_slug": "102_Yerragondapalem_SC",
+      "ac_name": "Yerragondapalem (SC)",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 103,
+      "ac_slug": "103_Darsi",
+      "ac_name": "Darsi",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 104,
+      "ac_slug": "104_Parchur",
+      "ac_name": "Parchur",
+      "district_id": "750",
+      "district_name": "Bapatla"
+    },
+    {
+      "ac_no": 105,
+      "ac_slug": "105_Addanki",
+      "ac_name": "Addanki",
+      "district_id": "750",
+      "district_name": "Bapatla"
+    },
+    {
+      "ac_no": 106,
+      "ac_slug": "106_Chirala",
+      "ac_name": "Chirala",
+      "district_id": "750",
+      "district_name": "Bapatla"
+    },
+    {
+      "ac_no": 107,
+      "ac_slug": "107_Santhanuthalapadu_SC",
+      "ac_name": "Santhanuthalapadu (SC)",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 108,
+      "ac_slug": "108_Ongole",
+      "ac_name": "Ongole",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 109,
+      "ac_slug": "109_Kandukur",
+      "ac_name": "Kandukur",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 110,
+      "ac_slug": "110_Kondapi_SC",
+      "ac_name": "Kondapi (SC)",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 111,
+      "ac_slug": "111_Markapuram",
+      "ac_name": "Markapuram",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 112,
+      "ac_slug": "112_Giddalur",
+      "ac_name": "Giddalur",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 113,
+      "ac_slug": "113_Kanigiri",
+      "ac_name": "Kanigiri",
+      "district_id": "511",
+      "district_name": "Prakasam"
+    },
+    {
+      "ac_no": 114,
+      "ac_slug": "114_Kavali",
+      "ac_name": "Kavali",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 115,
+      "ac_slug": "115_Atmakur",
+      "ac_name": "Atmakur",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 116,
+      "ac_slug": "116_Kovur",
+      "ac_name": "Kovur",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 117,
+      "ac_slug": "117_Nellore_City",
+      "ac_name": "Nellore City",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 118,
+      "ac_slug": "118_Nellore_Rural",
+      "ac_name": "Nellore Rural",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 119,
+      "ac_slug": "119_Sarvepalli",
+      "ac_name": "Sarvepalli",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 120,
+      "ac_slug": "120_Gudur_SC",
+      "ac_name": "Gudur (SC)",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 121,
+      "ac_slug": "121_Sullurpeta_SC",
+      "ac_name": "Sullurpeta (SC)",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 122,
+      "ac_slug": "122_Venkatagiri",
+      "ac_name": "Venkatagiri",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 123,
+      "ac_slug": "123_Udayagiri",
+      "ac_name": "Udayagiri",
+      "district_id": "515",
+      "district_name": "SPSR Nellore"
+    },
+    {
+      "ac_no": 124,
+      "ac_slug": "124_Badvel_SC",
+      "ac_name": "Badvel (SC)",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 125,
+      "ac_slug": "125_Rajampet",
+      "ac_name": "Rajampet",
+      "district_id": "753",
+      "district_name": "Annamayya"
+    },
+    {
+      "ac_no": 126,
+      "ac_slug": "126_Kadapa",
+      "ac_name": "Kadapa",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 127,
+      "ac_slug": "127_Kodur_SC",
+      "ac_name": "Kodur (SC)",
+      "district_id": "753",
+      "district_name": "Annamayya"
+    },
+    {
+      "ac_no": 128,
+      "ac_slug": "128_Rayachoti",
+      "ac_name": "Rayachoti",
+      "district_id": "753",
+      "district_name": "Annamayya"
+    },
+    {
+      "ac_no": 129,
+      "ac_slug": "129_Pulivendla",
+      "ac_name": "Pulivendla",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 130,
+      "ac_slug": "130_Kamalapuram",
+      "ac_name": "Kamalapuram",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 131,
+      "ac_slug": "131_Jammalamadugu",
+      "ac_name": "Jammalamadugu",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 132,
+      "ac_slug": "132_Proddatur",
+      "ac_name": "Proddatur",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 133,
+      "ac_slug": "133_Mydukur",
+      "ac_name": "Mydukur",
+      "district_id": "503",
+      "district_name": "YSR Kadapa"
+    },
+    {
+      "ac_no": 134,
+      "ac_slug": "134_Allagadda",
+      "ac_name": "Allagadda",
+      "district_id": "755",
+      "district_name": "Nandyal"
+    },
+    {
+      "ac_no": 135,
+      "ac_slug": "135_Srisailam",
+      "ac_name": "Srisailam",
+      "district_id": "755",
+      "district_name": "Nandyal"
+    },
+    {
+      "ac_no": 136,
+      "ac_slug": "136_Nandikotkur_SC",
+      "ac_name": "Nandikotkur (SC)",
+      "district_id": "755",
+      "district_name": "Nandyal"
+    },
+    {
+      "ac_no": 137,
+      "ac_slug": "137_Kurnool",
+      "ac_name": "Kurnool",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 138,
+      "ac_slug": "138_Panyam",
+      "ac_name": "Panyam",
+      "district_id": "755",
+      "district_name": "Nandyal"
+    },
+    {
+      "ac_no": 139,
+      "ac_slug": "139_Nandyal",
+      "ac_name": "Nandyal",
+      "district_id": "755",
+      "district_name": "Nandyal"
+    },
+    {
+      "ac_no": 140,
+      "ac_slug": "140_Banaganapalle",
+      "ac_name": "Banaganapalle",
+      "district_id": "755",
+      "district_name": "Nandyal"
+    },
+    {
+      "ac_no": 141,
+      "ac_slug": "141_Dhone",
+      "ac_name": "Dhone",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 142,
+      "ac_slug": "142_Pattikonda",
+      "ac_name": "Pattikonda",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 143,
+      "ac_slug": "143_Kodumur_SC",
+      "ac_name": "Kodumur (SC)",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 144,
+      "ac_slug": "144_Yemmiganur",
+      "ac_name": "Yemmiganur",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 145,
+      "ac_slug": "145_Mantralayam",
+      "ac_name": "Mantralayam",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 146,
+      "ac_slug": "146_Adoni",
+      "ac_name": "Adoni",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 147,
+      "ac_slug": "147_Alur",
+      "ac_name": "Alur",
+      "district_id": "512",
+      "district_name": "Kurnool"
+    },
+    {
+      "ac_no": 148,
+      "ac_slug": "148_Rayadurg",
+      "ac_name": "Rayadurg",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 149,
+      "ac_slug": "149_Uravakonda",
+      "ac_name": "Uravakonda",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 150,
+      "ac_slug": "150_Guntakal",
+      "ac_name": "Guntakal",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 151,
+      "ac_slug": "151_Tadpatri",
+      "ac_name": "Tadpatri",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 152,
+      "ac_slug": "152_Singanamala_SC",
+      "ac_name": "Singanamala (SC)",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 153,
+      "ac_slug": "153_Anantapur_Urban",
+      "ac_name": "Anantapur Urban",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 154,
+      "ac_slug": "154_Kalyandurg",
+      "ac_name": "Kalyandurg",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 155,
+      "ac_slug": "155_Raptadu",
+      "ac_name": "Raptadu",
+      "district_id": "502",
+      "district_name": "Ananthapuramu"
+    },
+    {
+      "ac_no": 156,
+      "ac_slug": "156_Madakasira_SC",
+      "ac_name": "Madakasira (SC)",
+      "district_id": "752",
+      "district_name": "Sri Sathya Sai"
+    },
+    {
+      "ac_no": 157,
+      "ac_slug": "157_Hindupur",
+      "ac_name": "Hindupur",
+      "district_id": "752",
+      "district_name": "Sri Sathya Sai"
+    },
+    {
+      "ac_no": 158,
+      "ac_slug": "158_Penukonda",
+      "ac_name": "Penukonda",
+      "district_id": "752",
+      "district_name": "Sri Sathya Sai"
+    },
+    {
+      "ac_no": 159,
+      "ac_slug": "159_Puttaparthi",
+      "ac_name": "Puttaparthi",
+      "district_id": "752",
+      "district_name": "Sri Sathya Sai"
+    },
+    {
+      "ac_no": 160,
+      "ac_slug": "160_Dharmavaram",
+      "ac_name": "Dharmavaram",
+      "district_id": "752",
+      "district_name": "Sri Sathya Sai"
+    },
+    {
+      "ac_no": 161,
+      "ac_slug": "161_Kadiri",
+      "ac_name": "Kadiri",
+      "district_id": "752",
+      "district_name": "Sri Sathya Sai"
+    },
+    {
+      "ac_no": 162,
+      "ac_slug": "162_Thamballapalle",
+      "ac_name": "Thamballapalle",
+      "district_id": "753",
+      "district_name": "Annamayya"
+    },
+    {
+      "ac_no": 163,
+      "ac_slug": "163_Pileru",
+      "ac_name": "Pileru",
+      "district_id": "753",
+      "district_name": "Annamayya"
+    },
+    {
+      "ac_no": 164,
+      "ac_slug": "164_Madanapalle",
+      "ac_name": "Madanapalle",
+      "district_id": "753",
+      "district_name": "Annamayya"
+    },
+    {
+      "ac_no": 165,
+      "ac_slug": "165_Punganur",
+      "ac_name": "Punganur",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    },
+    {
+      "ac_no": 166,
+      "ac_slug": "166_Chandragiri",
+      "ac_name": "Chandragiri",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 167,
+      "ac_slug": "167_Tirupati",
+      "ac_name": "Tirupati",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 168,
+      "ac_slug": "168_Srikalahasti",
+      "ac_name": "Srikalahasti",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 169,
+      "ac_slug": "169_Sathyavedu_SC",
+      "ac_name": "Sathyavedu (SC)",
+      "district_id": "754",
+      "district_name": "Tirupati"
+    },
+    {
+      "ac_no": 170,
+      "ac_slug": "170_Nagari",
+      "ac_name": "Nagari",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    },
+    {
+      "ac_no": 171,
+      "ac_slug": "171_Gangadhara_Nellore_SC",
+      "ac_name": "Gangadhara Nellore (SC)",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    },
+    {
+      "ac_no": 172,
+      "ac_slug": "172_Chittoor",
+      "ac_name": "Chittoor",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    },
+    {
+      "ac_no": 173,
+      "ac_slug": "173_Puthalapattu_SC",
+      "ac_name": "Puthalapattu (SC)",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    },
+    {
+      "ac_no": 174,
+      "ac_slug": "174_Palamaner",
+      "ac_name": "Palamaner",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    },
+    {
+      "ac_no": 175,
+      "ac_slug": "175_Kuppam",
+      "ac_name": "Kuppam",
+      "district_id": "504",
+      "district_name": "Chittoor"
+    }
+  ],
+  "total_constituencies": 175,
+  "updated_at": 1794283472.6215816
 }
