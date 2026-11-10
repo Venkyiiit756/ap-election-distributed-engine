@@ -104,7 +104,7 @@ class APSECClient:
     def get_mandals_in_revdiv(self, dist_id, rev_div_id):
         html = self.post("/apsec/getGPDistrictMandalReport", {"districtId": str(dist_id), "revenueDivisionId": str(rev_div_id)})
         mandals = []
-        for d, rd, mid in re.findall(r"urlPostSubmit\('getGPDistrictMandalGPReport',\s*\[[^\]]+\],\s*\['([^']+)','([^']+)','([^']+)'\]\)", html):
+        for d, rd, mid in re.findall(r"urlPostSubmit\('getGPDistrictMandalGPReport',\s*\[[^\]]+\],\s*\['([^']+)',\s*'([^']+)',\s*'([^']+)'\]\)", html):
             # Try to find label
             lbl_m = re.search(rf"'{mid}'[^>]*>([^<]+)</a>", html)
             mname = lbl_m.group(1).strip() if lbl_m else mid
@@ -123,7 +123,7 @@ class APSECClient:
             tds = TD_RE.findall(tr_clean)
             if len(tds) < 6:
                 continue
-            m_id = re.search(r"'getWardDistrictMandalGPReport'.*?\['[^']+','[^']+','[^']+','([^']+)'\]", tds[1])
+            m_id = re.search(r"'getWardDistrictMandalGPReport',\s*\[[^\]]+\],\s*\['[^']+',\s*'[^']+',\s*'[^']+',\s*'([^']+)'\]", tds[1], re.DOTALL)
             if not m_id:
                 continue
             gp_id = m_id.group(1).strip()
