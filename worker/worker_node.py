@@ -119,7 +119,8 @@ class APSECClient:
         })
         gps = []
         for tr in TR_RE.findall(html):
-            tds = TD_RE.findall(tr)
+            tr_clean = re.sub(r'<!--.*?-->', '', tr, flags=re.DOTALL)
+            tds = TD_RE.findall(tr_clean)
             if len(tds) < 6:
                 continue
             m_id = re.search(r"'getWardDistrictMandalGPReport'.*?\['[^']+','[^']+','[^']+','([^']+)'\]", tds[1])
