@@ -1,0 +1,106 @@
+{
+  "project_name": "ap-election-distributed-engine",
+  "version": "1.0.0",
+  "districts": [
+    {"dist_id": "746", "dist_name": "Kakinada"},
+    {"dist_id": "505", "dist_name": "East Godavari"},
+    {"dist_id": "747", "dist_name": "Dr B R Ambedkar Konaseema"},
+    {"dist_id": "791", "dist_name": "Alluri Sitharama Raju"},
+    {"dist_id": "506", "dist_name": "West Godavari"},
+    {"dist_id": "748", "dist_name": "Eluru"},
+    {"dist_id": "510", "dist_name": "Krishna"},
+    {"dist_id": "749", "dist_name": "NTR"},
+    {"dist_id": "507", "dist_name": "Guntur"},
+    {"dist_id": "750", "dist_name": "Bapatla"},
+    {"dist_id": "751", "dist_name": "Palnadu"},
+    {"dist_id": "511", "dist_name": "Prakasam"},
+    {"dist_id": "515", "dist_name": "SPSR Nellore"},
+    {"dist_id": "504", "dist_name": "Chittoor"},
+    {"dist_id": "754", "dist_name": "Tirupati"},
+    {"dist_id": "753", "dist_name": "Annamayya"},
+    {"dist_id": "503", "dist_name": "YSR Kadapa"},
+    {"dist_id": "502", "dist_name": "Ananthapuramu"},
+    {"dist_id": "752", "dist_name": "Sri Sathya Sai"},
+    {"dist_id": "512", "dist_name": "Kurnool"},
+    {"dist_id": "755", "dist_name": "Nandyal"},
+    {"dist_id": "517", "dist_name": "Visakhapatnam"},
+    {"dist_id": "745", "dist_name": "Anakapalli"},
+    {"dist_id": "518", "dist_name": "Vizianagaram"},
+    {"dist_id": "744", "dist_name": "Parvathipuram Manyam"},
+    {"dist_id": "516", "dist_name": "Srikakulam"}
+  ],
+  "sample_constituencies": [
+    {
+      "ac_no": 37,
+      "ac_slug": "37_Pithapuram",
+      "ac_name": "Pithapuram",
+      "district_id": "746",
+      "district_name": "Kakinada",
+      "mandals": [
+        {"mandal_id": "5253", "mandal_name": "Pithapuram"},
+        {"mandal_id": "5230", "mandal_name": "Gollaprolu"},
+        {"mandal_id": "5242", "mandal_name": "U Kothapalli"}
+      ]
+    },
+    {
+      "ac_no": 39,
+      "ac_slug": "39_Peddapuram",
+      "ac_name": "Peddapuram",
+      "district_id": "746",
+      "district_name": "Kakinada",
+      "mandals": [
+        {"mandal_id": "5252", "mandal_name": "Peddapuram Rural"},
+        {"mandal_id": "5265", "mandal_name": "Samalkota Rural"}
+      ]
+    },
+    {
+      "ac_no": 38,
+      "ac_slug": "38_Kakinada_Rural",
+      "ac_name": "Kakinada Rural",
+      "district_id": "746",
+      "district_name": "Kakinada",
+      "mandals": [
+        {"mandal_id": "5235", "mandal_name": "Kakinada Rural"},
+        {"mandal_id": "5237", "mandal_name": "Karapa"}
+      ]
+    },
+    {
+      "ac_no": 35,
+      "ac_slug": "35_Tuni",
+      "ac_name": "Tuni",
+      "district_id": "746",
+      "district_name": "Kakinada",
+      "mandals": [
+        {"mandal_id": "5270", "mandal_name": "Tuni"},
+        {"mandal_id": "5241", "mandal_name": "Kotananduru"},
+        {"mandal_id": "5269", "mandal_name": "Thondangi"}
+      ]
+    },
+    {
+      "ac_no": 36,
+      "ac_slug": "36_Prathipadu",
+      "ac_name": "Prathipadu",
+      "district_id": "746",
+      "district_name": "Kakinada",
+      "mandals": [
+        {"mandal_id": "5254", "mandal_name": "Prathipadu"},
+        {"mandal_id": "5266", "mandal_name": "Sankhavaram"},
+        {"mandal_id": "5273", "mandal_name": "Yeleswaram"},
+        {"mandal_id": "6802", "mandal_name": "Routhulapudi"}
+      ]
+    },
+    {
+      "ac_no": 52,
+      "ac_slug": "52_Jaggampeta",
+      "ac_name": "Jaggampeta",
+      "district_id": "746",
+      "district_name": "Kakinada",
+      "mandals": [
+        {"mandal_id": "5232", "mandal_name": "Jaggampeta"},
+        {"mandal_id": "5227", "mandal_name": "Gandepalle"},
+        {"mandal_id": "5239", "mandal_name": "Kirlampudi"},
+        {"mandal_id": "5229", "mandal_name": "Gokavaram"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+# AP Distributed Electoral & Rural GP Processing Engine
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Checkpoints and active streams (local node storage)
+checkpoints/
+*.jsonl
+*.tmp
+
+# Raw output downloads (synced to GDrive)
+data/
+output/
+downloads/
+*.zip
+*.csv
+*.xlsx
+
+# Local environment & secrets
+.env
+*.log
