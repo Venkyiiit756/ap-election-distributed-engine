@@ -245,14 +245,21 @@ class WorkerNode:
                 continue
             row = cur.execute("SELECT COUNT(*), COALESCE(SUM(official_voters), 0) FROM gram_panchayats WHERE ac_no = ?", (ac_no,)).fetchone()
             cnt, voters = row
+            pending_m = cur.execute("SELECT COUNT(*) FROM mandals WHERE primary_ac_no = ? AND status != 'COMPLETED'", (ac_no,)).fetchone()[0]
+            total_m = cur.execute("SELECT COUNT(*) FROM mandals WHERE primary_ac_no = ?", (ac_no,)).fetchone()[0]
+            done_ac = (total_m > 0 and pending_m == 0)
             cur.execute("""
             UPDATE constituencies
             SET total_gps = ?, completed_gps = ?, total_voters = ?, completed_voters = ?,
-                status = CASE WHEN status='SYNCED' THEN 'SYNCED' ELSE 'IN_PROGRESS' END,
+                status = CASE
+                    WHEN status = 'SYNCED' THEN 'SYNCED'
+                    WHEN ? THEN 'COMPLETED'
+                    ELSE 'IN_PROGRESS'
+                END,
                 assigned_node = ?,
                 updated_at = ?
             WHERE ac_no = ?
-            """, (cnt, cnt, voters, voters, self.node_id, time.time(), ac_no))
+            """, (cnt, cnt, voters, voters, 1 if done_ac else 0, self.node_id, time.time(), ac_no))
         conn.commit()
         conn.close()
 
