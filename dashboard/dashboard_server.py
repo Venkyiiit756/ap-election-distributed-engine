@@ -204,9 +204,9 @@ function refreshTelemetry() {
       if (agents.length > 0) {
         logPanel.style.display = 'block';
         logPre.innerText = agents.map(a =>
-          `=== ${a.node_id} (${a.worker_running ? 'RUNNING ' + a.workers_count + 'T' : 'STOPPED'} | seen ${a.last_poll_sec}s ago) ===\n` +
-          (a.log_tail || []).join('\n')
-        ).join('\n\n');
+          `=== ${a.node_id} (${a.worker_running ? 'RUNNING ' + a.workers_count + 'T' : 'STOPPED'} | seen ${a.last_poll_sec}s ago) ===\\n` +
+          (a.log_tail || []).join('\\n')
+        ).join('\\n\\n');
       } else {
         logPanel.style.display = 'none';
       }
