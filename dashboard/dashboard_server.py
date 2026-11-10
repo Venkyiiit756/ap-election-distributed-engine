@@ -6,9 +6,15 @@ import os
 import sys
 import time
 import urllib.parse
+import threading
+import csv
+import zipfile
 
 sys.stdout.reconfigure(encoding="utf-8")
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "coordinator", "registry.sqlite")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "coordinator", "registry.sqlite")
+EXPORTS_DIR = os.path.join(BASE_DIR, "exports")
+COORDINATOR_LOCK = threading.Lock()
 
 HTML_PAGE = """<!DOCTYPE html>
 <html lang="en">
@@ -198,6 +204,21 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(HTML_PAGE.encode("utf-8"))
             return
 
+        elif parsed.path == "/mac-kit.zip":
+            kit_path = os.path.join(EXPORTS_DIR, "apsec_mac_worker_kit.zip")
+            if not os.path.exists(kit_path):
+                self._send_json(404, {"error": "mac-kit.zip not built yet"})
+                return
+            with open(kit_path, "rb") as f:
+                data = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/zip")
+            self.send_header("Content-Disposition", 'attachment; filename="apsec_mac_worker_kit.zip"')
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+            return
+
         elif parsed.path == "/api/telemetry":
             conn = sqlite3.connect(DB_PATH, timeout=30)
             cur = conn.cursor()
@@ -255,6 +276,165 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         super().do_GET()
+
+    def _send_json(self, code, payload):
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.end_headers()
+        self.wfile.write(json.dumps(payload).encode("utf-8"))
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        length = int(self.headers.get("Content-Length", "0"))
+        raw = self.rfile.read(length) if length > 0 else b"{}"
+        try:
+            body = json.loads(raw.decode("utf-8"))
+        except Exception:
+            self._send_json(400, {"error": "invalid json"})
+            return
+
+        now = time.time()
+
+        if parsed.path == "/api/heartbeat":
+            with COORDINATOR_LOCK:
+                conn = sqlite3.connect(DB_PATH, timeout=30)
+                conn.execute("""
+                INSERT INTO worker_nodes (node_id, hostname, ip_address, workers_count, last_heartbeat, current_ac, rate_voters_per_sec, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'ACTIVE')
+                ON CONFLICT(node_id) DO UPDATE SET
+                    hostname=excluded.hostname,
+                    ip_address=excluded.ip_address,
+                    workers_count=excluded.workers_count,
+                    last_heartbeat=excluded.last_heartbeat,
+                    current_ac=excluded.current_ac,
+                    rate_voters_per_sec=excluded.rate_voters_per_sec,
+                    status='ACTIVE'
+                """, (
+                    body.get("node_id"), body.get("hostname", "remote"),
+                    body.get("ip_address", self.client_address[0]),
+                    int(body.get("workers_count", 1)), now,
+                    body.get("current_ac"), float(body.get("rate", 0.0))
+                ))
+                conn.commit()
+                conn.close()
+            self._send_json(200, {"ok": True})
+            return
+
+        elif parsed.path == "/api/claim_mandal":
+            node_id = body.get("node_id", "remote-node")
+            with COORDINATOR_LOCK:
+                conn = sqlite3.connect(DB_PATH, timeout=30)
+                cur = conn.cursor()
+                cur.execute("""
+                SELECT mandal_id, district_id, district_name, rev_div_id, mandal_name, primary_ac_no
+                FROM mandals
+                WHERE status = 'PENDING' OR (status = 'IN_PROGRESS' AND updated_at < ?)
+                ORDER BY
+                    CASE
+                        WHEN primary_ac_no IN (35, 36, 37, 52, 40) THEN 0
+                        WHEN primary_ac_no > 0 THEN 1
+                        ELSE 2
+                    END,
+                    district_id ASC,
+                    mandal_name ASC
+                LIMIT 1
+                """, (now - 300,))
+                row = cur.fetchone()
+                if not row:
+                    conn.close()
+                    self._send_json(200, {"mandal": None})
+                    return
+                m_id, d_id, d_name, rd_id, m_name, pri_ac = row
+                cur.execute("UPDATE mandals SET status = 'IN_PROGRESS', assigned_node = ?, updated_at = ? WHERE mandal_id = ?", (node_id, now, m_id))
+                conn.commit()
+                conn.close()
+            self._send_json(200, {
+                "mandal": {
+                    "mandal_id": m_id, "district_id": d_id, "district_name": d_name,
+                    "rev_div_id": rd_id, "mandal_name": m_name, "primary_ac_no": pri_ac
+                }
+            })
+            return
+
+        elif parsed.path == "/api/submit_mandal":
+            node_id = body.get("node_id", "remote-node")
+            m_id = str(body.get("mandal_id"))
+            d_id = str(body.get("district_id"))
+            rd_id = str(body.get("rev_div_id"))
+            m_name = body.get("mandal_name", "")
+            mandal_ac = int(body.get("mandal_ac") or 0)
+            mptcs = body.get("mptcs", [])
+            gps = body.get("gps", [])
+            wards_by_gp = body.get("wards_by_gp", {})
+
+            touched_acs = set()
+            mandal_voters = 0
+            with COORDINATOR_LOCK:
+                conn = sqlite3.connect(DB_PATH, timeout=30)
+                cur = conn.cursor()
+                for mp in mptcs:
+                    ac_val = int(mp.get("ac_no") or mandal_ac or 0)
+                    cur.execute("""
+                    INSERT INTO mptc_mappings (district_id, mandal_id, mandal_name, mptc_id, mptc_name, gp_id, gp_name, wards_range, ac_no, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(mandal_id, mptc_id, gp_id, wards_range) DO UPDATE SET
+                        mptc_name=excluded.mptc_name, gp_name=excluded.gp_name, ac_no=excluded.ac_no, updated_at=excluded.updated_at
+                    """, (str(mp["district_id"]), str(mp["mandal_id"]), mp["mandal_name"], str(mp["mptc_id"]), mp["mptc_name"], str(mp["gp_id"]), mp["gp_name"], mp["wards_range"], ac_val, now))
+
+                for gp in gps:
+                    gp_id = str(gp["gp_id"])
+                    ac_no = int(gp.get("ac_no") or mandal_ac or 0)
+                    if ac_no:
+                        touched_acs.add(ac_no)
+                    w_list = wards_by_gp.get(gp_id, [])
+                    mandal_voters += int(gp.get("total", 0))
+                    cur.execute("""
+                    INSERT INTO gram_panchayats (gp_id, ac_no, district_id, rev_div_id, mandal_id, mandal_name, gp_name_en, official_voters, harvested_voters, male_voters, female_voters, other_voters, wards_count, dpo_confirmed, status, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'COMPLETED', ?)
+                    ON CONFLICT(gp_id) DO UPDATE SET
+                        ac_no=excluded.ac_no, district_id=excluded.district_id, rev_div_id=excluded.rev_div_id,
+                        mandal_id=excluded.mandal_id, mandal_name=excluded.mandal_name, gp_name_en=excluded.gp_name_en,
+                        official_voters=excluded.official_voters, harvested_voters=excluded.harvested_voters,
+                        male_voters=excluded.male_voters, female_voters=excluded.female_voters, other_voters=excluded.other_voters,
+                        wards_count=excluded.wards_count, status='COMPLETED', updated_at=excluded.updated_at
+                    """, (gp_id, ac_no, d_id, rd_id, m_id, m_name, gp["gp_name"], gp["total"], gp["total"], gp["male"], gp["female"], gp["other"], len(w_list), now))
+
+                    for w in w_list:
+                        cur.execute("""
+                        INSERT INTO ward_strengths (ac_no, mandal_id, gp_id, ward_no, male_voters, female_voters, other_voters, total_voters, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(gp_id, ward_no) DO UPDATE SET
+                            ac_no=excluded.ac_no, male_voters=excluded.male_voters, female_voters=excluded.female_voters,
+                            other_voters=excluded.other_voters, total_voters=excluded.total_voters, updated_at=excluded.updated_at
+                        """, (ac_no, m_id, gp_id, str(w["ward_no"]), w["male"], w["female"], w["other"], w["total"], now))
+
+                cur.execute("""
+                UPDATE mandals
+                SET status = 'COMPLETED', primary_ac_no = CASE WHEN primary_ac_no=0 THEN ? ELSE primary_ac_no END,
+                    total_gps = ?, total_voters = ?, assigned_node = ?, updated_at = ?
+                WHERE mandal_id = ?
+                """, (mandal_ac, len(gps), mandal_voters, node_id, now, m_id))
+
+                for ac_no in touched_acs:
+                    row = cur.execute("SELECT COUNT(*), COALESCE(SUM(official_voters), 0) FROM gram_panchayats WHERE ac_no = ?", (ac_no,)).fetchone()
+                    cnt, voters = row
+                    pending_m = cur.execute("SELECT COUNT(*) FROM mandals WHERE primary_ac_no = ? AND status != 'COMPLETED'", (ac_no,)).fetchone()[0]
+                    total_m = cur.execute("SELECT COUNT(*) FROM mandals WHERE primary_ac_no = ?", (ac_no,)).fetchone()[0]
+                    done_ac = (total_m > 0 and pending_m == 0)
+                    cur.execute("""
+                    UPDATE constituencies
+                    SET total_gps = ?, completed_gps = ?, total_voters = ?, completed_voters = ?,
+                        status = CASE WHEN status = 'SYNCED' THEN 'SYNCED' WHEN ? THEN 'COMPLETED' ELSE 'IN_PROGRESS' END,
+                        assigned_node = ?, updated_at = ?
+                    WHERE ac_no = ?
+                    """, (cnt, cnt, voters, voters, 1 if done_ac else 0, node_id, now, ac_no))
+                conn.commit()
+                conn.close()
+
+            self._send_json(200, {"ok": True, "gps": len(gps), "voters": mandal_voters})
+            return
+
+        self._send_json(404, {"error": "not found"})
 
 def run_telemetry_server(port=8085):
     if len(sys.argv) > 1 and sys.argv[1].isdigit():

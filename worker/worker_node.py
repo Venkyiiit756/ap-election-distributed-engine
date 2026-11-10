@@ -10,6 +10,7 @@ import ssl
 import http.client
 import re
 import urllib.parse
+import urllib.request
 import zipfile
 import threading
 import concurrent.futures
@@ -190,9 +191,11 @@ class APSECClient:
 
 
 class WorkerNode:
-    def __init__(self, node_id, workers_count=2):
+    def __init__(self, node_id, workers_count=2, coordinator_url=None, skip_wards=False):
         self.node_id = node_id
         self.workers_count = max(1, workers_count)
+        self.coordinator_url = coordinator_url.rstrip("/") if coordinator_url else None
+        self.skip_wards = skip_wards
         self.hostname = socket.gethostname()
         try:
             self.ip_address = socket.gethostbyname(self.hostname)
@@ -201,8 +204,20 @@ class WorkerNode:
         self.current_ac = None
         self.db_lock = threading.Lock()
         self.rate_lock = threading.Lock()
-        self.voter_events = deque()  # (timestamp, count) over rolling 30s window
+        self.voter_events = deque()
         self.tls = threading.local()
+        self.slow_ward_districts = set()
+        self.ward_fail_streak = {}
+
+    def _coord_post(self, path, payload, timeout=20):
+        req = urllib.request.Request(
+            f"{self.coordinator_url}{path}",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read().decode("utf-8"))
 
     def get_client(self):
         if not hasattr(self.tls, "client"):
@@ -225,6 +240,16 @@ class WorkerNode:
         if rate is None:
             rate = self.record_voters(0)
         try:
+            if self.coordinator_url:
+                self._coord_post("/api/heartbeat", {
+                    "node_id": self.node_id,
+                    "hostname": self.hostname,
+                    "ip_address": self.ip_address,
+                    "workers_count": self.workers_count,
+                    "current_ac": self.current_ac,
+                    "rate": round(rate, 1)
+                }, timeout=10)
+                return
             with self.db_lock:
                 conn = sqlite3.connect(DB_PATH, timeout=30)
                 cur = conn.cursor()
@@ -244,6 +269,8 @@ class WorkerNode:
             print(f"[Heartbeat Error] {e}", flush=True)
 
     def release_stalled_mandals(self):
+        if self.coordinator_url:
+            return
         with self.db_lock:
             conn = sqlite3.connect(DB_PATH, timeout=30)
             conn.execute("UPDATE mandals SET status='PENDING', assigned_node=NULL WHERE status='IN_PROGRESS'")
@@ -251,6 +278,17 @@ class WorkerNode:
             conn.close()
 
     def claim_next_mandal(self):
+        if self.coordinator_url:
+            try:
+                res = self._coord_post("/api/claim_mandal", {"node_id": self.node_id}, timeout=15)
+                m = res.get("mandal")
+                if not m:
+                    return None, None, None, None, None, None
+                return m["mandal_id"], m["district_id"], m["district_name"], m["rev_div_id"], m["mandal_name"], m["primary_ac_no"]
+            except Exception as e:
+                print(f"[Claim Error] {e}", flush=True)
+                return None, None, None, None, None, None
+
         with self.db_lock:
             conn = sqlite3.connect(DB_PATH, timeout=30)
             cur = conn.cursor()
@@ -363,89 +401,126 @@ class WorkerNode:
 
         gps = client.get_gps_strength(d_id, rd_id, m_id)
 
-        with self.db_lock:
-            conn = sqlite3.connect(DB_PATH, timeout=30)
-            cur = conn.cursor()
-            for mp in mptcs:
-                ac_val = mp["ac_no"] or mandal_ac
-                cur.execute("""
-                INSERT INTO mptc_mappings (district_id, mandal_id, mandal_name, mptc_id, mptc_name, gp_id, gp_name, wards_range, ac_no, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(mandal_id, mptc_id, gp_id, wards_range) DO UPDATE SET
-                    mptc_name=excluded.mptc_name,
-                    gp_name=excluded.gp_name,
-                    ac_no=excluded.ac_no,
-                    updated_at=excluded.updated_at
-                """, (mp["district_id"], mp["mandal_id"], mp["mandal_name"], mp["mptc_id"], mp["mptc_name"], mp["gp_id"], mp["gp_name"], mp["wards_range"], ac_val, time.time()))
-            conn.commit()
-            conn.close()
-
-        mandal_voters = 0
-        touched_acs = set()
-        for gp in gps:
-            gp_id = gp["gp_id"]
-            ac_no = gp_to_ac.get(gp_id, mandal_ac)
-            if ac_no:
-                touched_acs.add(ac_no)
-
-            wards = client.get_wards_strength(d_id, rd_id, m_id, gp_id)
-            mandal_voters += gp["total"]
-
+        if not self.coordinator_url:
             with self.db_lock:
                 conn = sqlite3.connect(DB_PATH, timeout=30)
                 cur = conn.cursor()
-                cur.execute("""
-                INSERT INTO gram_panchayats (gp_id, ac_no, district_id, rev_div_id, mandal_id, mandal_name, gp_name_en, official_voters, harvested_voters, male_voters, female_voters, other_voters, wards_count, dpo_confirmed, status, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'COMPLETED', ?)
-                ON CONFLICT(gp_id) DO UPDATE SET
-                    ac_no=excluded.ac_no,
-                    district_id=excluded.district_id,
-                    rev_div_id=excluded.rev_div_id,
-                    mandal_id=excluded.mandal_id,
-                    mandal_name=excluded.mandal_name,
-                    gp_name_en=excluded.gp_name_en,
-                    official_voters=excluded.official_voters,
-                    harvested_voters=excluded.harvested_voters,
-                    male_voters=excluded.male_voters,
-                    female_voters=excluded.female_voters,
-                    other_voters=excluded.other_voters,
-                    wards_count=excluded.wards_count,
-                    status='COMPLETED',
-                    updated_at=excluded.updated_at
-                """, (gp_id, ac_no, d_id, rd_id, m_id, m_name, gp["gp_name"], gp["total"], gp["total"], gp["male"], gp["female"], gp["other"], len(wards), time.time()))
-
-                for w in wards:
+                for mp in mptcs:
+                    ac_val = mp["ac_no"] or mandal_ac
                     cur.execute("""
-                    INSERT INTO ward_strengths (ac_no, mandal_id, gp_id, ward_no, male_voters, female_voters, other_voters, total_voters, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    ON CONFLICT(gp_id, ward_no) DO UPDATE SET
+                    INSERT INTO mptc_mappings (district_id, mandal_id, mandal_name, mptc_id, mptc_name, gp_id, gp_name, wards_range, ac_no, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(mandal_id, mptc_id, gp_id, wards_range) DO UPDATE SET
+                        mptc_name=excluded.mptc_name,
+                        gp_name=excluded.gp_name,
                         ac_no=excluded.ac_no,
-                        male_voters=excluded.male_voters,
-                        female_voters=excluded.female_voters,
-                        other_voters=excluded.other_voters,
-                        total_voters=excluded.total_voters,
                         updated_at=excluded.updated_at
-                    """, (ac_no, m_id, gp_id, w["ward_no"], w["male"], w["female"], w["other"], w["total"], time.time()))
+                    """, (mp["district_id"], mp["mandal_id"], mp["mandal_name"], mp["mptc_id"], mp["mptc_name"], mp["gp_id"], mp["gp_name"], mp["wards_range"], ac_val, time.time()))
                 conn.commit()
                 conn.close()
 
-            rate = self.record_voters(gp["total"])
-            self.register_heartbeat(rate=rate)
+        mandal_voters = 0
+        touched_acs = set()
+        wards_by_gp = {}
+        for idx, gp in enumerate(gps):
+            gp_id = gp["gp_id"]
+            ac_no = gp_to_ac.get(gp_id, mandal_ac)
+            gp["ac_no"] = ac_no
+            if ac_no:
+                touched_acs.add(ac_no)
 
-        with self.db_lock:
-            conn = sqlite3.connect(DB_PATH, timeout=30)
-            conn.execute("""
-            UPDATE mandals
-            SET status = 'COMPLETED', primary_ac_no = CASE WHEN primary_ac_no=0 THEN ? ELSE primary_ac_no END,
-                total_gps = ?, total_voters = ?, updated_at = ?
-            WHERE mandal_id = ?
-            """, (mandal_ac, len(gps), mandal_voters, time.time(), m_id))
-            conn.commit()
-            conn.close()
+            with self.rate_lock:
+                skip_w = self.skip_wards or (d_id in self.slow_ward_districts)
+            if skip_w:
+                wards = []
+            else:
+                wards = client.get_wards_strength(d_id, rd_id, m_id, gp_id)
+                with self.rate_lock:
+                    if len(wards) == 0:
+                        streak = self.ward_fail_streak.get(d_id, 0) + 1
+                        self.ward_fail_streak[d_id] = streak
+                        if streak >= 3 and d_id not in self.slow_ward_districts:
+                            self.slow_ward_districts.add(d_id)
+                            print(f"[CircuitBreaker] Skipping slow ward calls for District {d_id} ({d_name})", flush=True)
+                    else:
+                        self.ward_fail_streak[d_id] = 0
 
-        self.rollup_constituencies(touched_acs)
-        for ac in touched_acs:
-            self.export_ac_bundle(ac)
+            mandal_voters += gp["total"]
+
+            if self.coordinator_url:
+                wards_by_gp[str(gp_id)] = wards
+                rate = self.record_voters(gp["total"])
+                if idx % 5 == 0 or idx == len(gps) - 1:
+                    self.register_heartbeat(rate=rate)
+            else:
+                with self.db_lock:
+                    conn = sqlite3.connect(DB_PATH, timeout=30)
+                    cur = conn.cursor()
+                    cur.execute("""
+                    INSERT INTO gram_panchayats (gp_id, ac_no, district_id, rev_div_id, mandal_id, mandal_name, gp_name_en, official_voters, harvested_voters, male_voters, female_voters, other_voters, wards_count, dpo_confirmed, status, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'COMPLETED', ?)
+                    ON CONFLICT(gp_id) DO UPDATE SET
+                        ac_no=excluded.ac_no,
+                        district_id=excluded.district_id,
+                        rev_div_id=excluded.rev_div_id,
+                        mandal_id=excluded.mandal_id,
+                        mandal_name=excluded.mandal_name,
+                        gp_name_en=excluded.gp_name_en,
+                        official_voters=excluded.official_voters,
+                        harvested_voters=excluded.harvested_voters,
+                        male_voters=excluded.male_voters,
+                        female_voters=excluded.female_voters,
+                        other_voters=excluded.other_voters,
+                        wards_count=excluded.wards_count,
+                        status='COMPLETED',
+                        updated_at=excluded.updated_at
+                    """, (gp_id, ac_no, d_id, rd_id, m_id, m_name, gp["gp_name"], gp["total"], gp["total"], gp["male"], gp["female"], gp["other"], len(wards), time.time()))
+
+                    for w in wards:
+                        cur.execute("""
+                        INSERT INTO ward_strengths (ac_no, mandal_id, gp_id, ward_no, male_voters, female_voters, other_voters, total_voters, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(gp_id, ward_no) DO UPDATE SET
+                            ac_no=excluded.ac_no,
+                            male_voters=excluded.male_voters,
+                            female_voters=excluded.female_voters,
+                            other_voters=excluded.other_voters,
+                            total_voters=excluded.total_voters,
+                            updated_at=excluded.updated_at
+                        """, (ac_no, m_id, gp_id, w["ward_no"], w["male"], w["female"], w["other"], w["total"], time.time()))
+                    conn.commit()
+                    conn.close()
+
+                rate = self.record_voters(gp["total"])
+                self.register_heartbeat(rate=rate)
+
+        if self.coordinator_url:
+            self._coord_post("/api/submit_mandal", {
+                "node_id": self.node_id,
+                "mandal_id": m_id,
+                "district_id": d_id,
+                "rev_div_id": rd_id,
+                "mandal_name": m_name,
+                "mandal_ac": mandal_ac,
+                "mptcs": mptcs,
+                "gps": gps,
+                "wards_by_gp": wards_by_gp
+            }, timeout=60)
+        else:
+            with self.db_lock:
+                conn = sqlite3.connect(DB_PATH, timeout=30)
+                conn.execute("""
+                UPDATE mandals
+                SET status = 'COMPLETED', primary_ac_no = CASE WHEN primary_ac_no=0 THEN ? ELSE primary_ac_no END,
+                    total_gps = ?, total_voters = ?, updated_at = ?
+                WHERE mandal_id = ?
+                """, (mandal_ac, len(gps), mandal_voters, time.time(), m_id))
+                conn.commit()
+                conn.close()
+
+            self.rollup_constituencies(touched_acs)
+            for ac in touched_acs:
+                self.export_ac_bundle(ac)
 
         print(f"[T{thread_idx}] [OK] {m_name} -> AC-{mandal_ac} | {len(gps)} GPs | {mandal_voters:,} voters | {len(mptcs)} MPTC maps", flush=True)
 
@@ -480,7 +555,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Distributed APSEC Zero-Duplication GP & MPTC Worker")
     parser.add_argument("--node-id", type=str, default=f"node-{socket.gethostname().lower()}")
     parser.add_argument("--workers", type=int, default=2)
+    parser.add_argument("--coordinator-url", type=str, default=None, help="HTTP URL of coordinator (e.g. http://192.168.1.5:8085)")
+    parser.add_argument("--skip-wards", action="store_true", help="Skip per-ward HTTP requests and harvest GP + MPTC totals only")
     args = parser.parse_args()
 
-    node = WorkerNode(args.node_id, args.workers)
+    node = WorkerNode(args.node_id, args.workers, coordinator_url=args.coordinator_url, skip_wards=args.skip_wards)
     node.run()
