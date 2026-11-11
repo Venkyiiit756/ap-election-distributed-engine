@@ -33,20 +33,22 @@ END
 """
 
 def _claim_backfill_mandal(cur, node_id, now):
-    rows = cur.execute(f"""
-    SELECT DISTINCT m.mandal_id, m.district_id, m.district_name, m.rev_div_id, m.mandal_name, m.primary_ac_no
+    rows = cur.execute("""
+    SELECT m.mandal_id, m.district_id, m.district_name, m.rev_div_id, m.mandal_name, m.primary_ac_no,
+           COUNT(DISTINCT gp.gp_id) AS missing_gps
     FROM mandals m
     JOIN gram_panchayats gp ON gp.mandal_id = m.mandal_id
     LEFT JOIN ward_strengths w ON w.gp_id = gp.gp_id
     WHERE w.gp_id IS NULL
-    ORDER BY {PRIORITY_BACKFILL_CASE}, m.district_id ASC, m.mandal_name ASC
+    GROUP BY m.mandal_id, m.district_id, m.district_name, m.rev_div_id, m.mandal_name, m.primary_ac_no
+    ORDER BY missing_gps DESC, m.district_id ASC, m.mandal_name ASC
     """).fetchall()
     for r in rows:
         m_id = str(r[0])
         if m_id in BACKFILL_ATTEMPTED:
             continue
         prev = BACKFILL_CLAIMED.get(m_id)
-        if prev and prev[1] > now - 900:
+        if prev and prev[1] > now - 1800:
             continue
         BACKFILL_CLAIMED[m_id] = (node_id, now)
         return {
@@ -605,6 +607,13 @@ class TelemetryHandler(http.server.SimpleHTTPRequestHandler):
                 for t in targets:
                     CONTROL_QUEUE.setdefault(t, []).append(dict(cmd))
             self._send_json(200, {"ok": True, "queued_for": targets, "command": cmd})
+            return
+
+        elif parsed.path == "/api/backfill/reset":
+            with COORDINATOR_LOCK:
+                BACKFILL_CLAIMED.clear()
+                BACKFILL_ATTEMPTED.clear()
+            self._send_json(200, {"ok": True, "backfill_reset": True})
             return
 
         self._send_json(404, {"error": "not found"})
